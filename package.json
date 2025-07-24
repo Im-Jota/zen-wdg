@@ -1,18 +1,40 @@
 {
   "name": "zen-wdg",
-  "version": "2.0.0",
+  "version": "2.0.13",
   "description": "Minimal widget library for Gridstack-based newtab extensions",
   "main": "dist/zen-wdg.umd.js",
   "module": "dist/zen-wdg.es.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "require": "./dist/zen-wdg.umd.js",
+      "import": "./dist/zen-wdg.es.js"
+    },
+    "./zen-wdg.css": {
+      "import": "./dist/zen-wdg.css",
+      "require": "./dist/zen-wdg.css"
+    }
+  },
   "type": "module",
   "scripts": {
-    "build": "vite build",
+    "build": "vite build && vue-tsc --declaration --emitDeclarationOnly --outDir dist",
     "dev": "vite"
   },
   "author": "Im-Jota",
   "license": "AGPL-3.0",
   "devDependencies": {
+    "@vitejs/plugin-vue": "^6.0.0",
     "terser": "^5.43.1",
-    "vite": "^5.0.0"
-  }
+    "typescript": "^5.8.3",
+    "vite": "^6.0.0",
+    "vite-plugin-copy": "^0.1.6",
+    "vue": "^3.5.18",
+    "vue-tsc": "^3.0.3"
+  },
+  "files": [
+    "dist/",
+    "src/index.js",
+    "src/widgets/",
+    "AUTHORS.md"
+  ]
 }
