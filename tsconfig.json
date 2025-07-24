@@ -1,0 +1,24 @@
+{
+  "compilerOptions": {
+    "outDir": "./dist",  // Especifica la carpeta de salida para los archivos generados
+    "declaration": true, // Habilita la generación de archivos .d.ts
+    "declarationDir": "./dist", // Especifica dónde se generarán los archivos .d.ts
+    "emitDeclarationOnly": true, // Genera solo archivos de declaración (.d.ts)
+    "moduleResolution": "node", // Resuelve módulos como Node.js
+    "strict": true, // Activa todas las verificaciones estrictas de TypeScript
+    "esModuleInterop": true, // Asegura que la interoperabilidad de ES Modules esté activada
+    "skipLibCheck": true, // Omite la comprobación de tipos de bibliotecas
+    "target": "esnext", // Utiliza ESNext para la salida
+    "module": "ESNext", // Utiliza módulos ESNext
+    "jsx": "preserve" // Si usas JSX
+  },
+  "include": [
+    "src/**/*.ts",  // Incluye todos los archivos .ts
+    "src/components/**/*.vue",  // Incluye todos los archivos .ts
+    "src/**/*.d.ts", // Incluye los archivos de declaración .d.ts
+    "src/**/*.vue" // Incluye los archivos Vue si estás usándolos
+  ],
+  "exclude": [
+    "node_modules" // Excluye la carpeta node_modules
+  ]
+}
