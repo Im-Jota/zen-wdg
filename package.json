@@ -1,6 +1,6 @@
 {
   "name": "zen-wdg",
-  "version": "2.0.13",
+  "version": "2.2.3",
   "description": "Minimal widget library for Gridstack-based newtab extensions",
   "main": "dist/zen-wdg.umd.js",
   "module": "dist/zen-wdg.es.js",
@@ -36,5 +36,8 @@
     "src/index.js",
     "src/widgets/",
     "AUTHORS.md"
-  ]
+  ],
+  "dependencies": {
+    "@iconify/vue": "^5.0.0"
+  }
 }
