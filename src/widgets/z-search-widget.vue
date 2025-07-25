@@ -1,6 +1,6 @@
 <template>
   <div class="search">
-    <img src="../assets/favicon.png" />
+    <img v-if="logo" :src="logo" />
     <Input placeholder="Search something" full class="bg" v-model="text" @enter-pressed="search()" />
     <Button icon="material-symbols-light:search-rounded" size="25px" flat class="text-color" @click="search()" />
   </div>
@@ -21,8 +21,12 @@ export default {
   props: {
     searchTarget: {
       type: String,
-      require: true,
+      require: false,
       default: "same"
+    },
+    logo: {
+      type: String,
+      require: false,
     }
   },
 
