@@ -63,7 +63,7 @@ export default {
     },
     small: {
       type: Boolean,
-      default: true
+      default: false
     },
     categories: {
       type: Array,
@@ -245,12 +245,16 @@ export default {
 .grid {
   display: flex;
   flex-wrap: wrap;
+  gap: .4rem;
+}
+
+.grid.small {
   gap: 1.4rem;
 }
 
 .card {
   position: relative;
-  flex: 1 1 100px;
+  flex: 1 1 80px;
 }
 
 .card.small {
