@@ -22,11 +22,14 @@
           <button class="edit-app" @click.prevent="editBookmark(index)">✏️</button>
           <button class="delete-app" @click.prevent="deleteBookmark(index)">🗑️</button>
         </div>
-        <a href="#" class="card-link" :class="theme == 'dark' ? 'dark' : 'light'" @click.prevent="openLink(item.url)">
+        <a 
+          :href="item.url"
+          class="card-link"
+          :class="theme == 'dark' ? 'dark' : 'light'"
+          :target="open == 'Self Tab' ? '_self' : '_blank'">
           <div class="column">
             <div
-              class="icon-container"
-              :style="getIconStyle"
+              class="logo-container"
             >
               <img
                 :src="item.logo"
@@ -71,7 +74,7 @@ export default {
     },
     open: {
       type: String,
-      default: 'self'
+      default: 'Self Tab'
     },
     useStorage: {
       type: Boolean,
@@ -115,22 +118,6 @@ export default {
   computed: {
     currentBookmarks() {
       return this.bookmarks[this.activeTab] || [];
-    },
-    getIconStyle() {
-      return {
-        position: 'relative',
-        width: this.small ? '50px' : '40px',
-        height: this.small ? '50px' : '40px',
-        marginBottom: '8px',
-        borderRadius: '.4rem',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        fontWeight: 'bold',
-        fontSize: '1.8rem',
-        color: this.theme === 'light' ? '#555' : '#eee',
-        userSelect: 'none'
-      };
     }
   },
   methods: {
@@ -209,7 +196,10 @@ export default {
   display: flex;
   gap: 10px;
   flex-wrap: wrap;
-  background: rgba(220, 220, 220, 0.4);
+  backdrop-filter: blur(10px) saturate(180%);
+  -webkit-backdrop-filter: blur(10px) saturate(180%);
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.3);
   color: #444444;
   padding: 0.2rem;
   border-radius: 0.6rem;
@@ -217,7 +207,7 @@ export default {
 }
 
 .tabs.dark {
-  background: rgba(0, 0, 0, 0.4);
+  background: rgba(20, 20, 20, 0.3);
   color: #dfdfdf;
 }
 
@@ -230,14 +220,16 @@ export default {
   padding: 8px 2rem;
   border: none;
   cursor: pointer;
-  transition: 0.3s;
   font-weight: 600;
   background-color: transparent;
   color: unset;
 }
 
 .tab.active {
-  background-color: #066D5A;
+  background-color: rgba(6, 109, 90, 0.3);
+  backdrop-filter: blur(10px) saturate(180%);
+  -webkit-backdrop-filter: blur(10px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.3);
   color: white;
   border-radius: 0.5rem;
 }
@@ -262,12 +254,14 @@ export default {
 }
 
 .card-link {
-  height: 106px;
+  height: 115px;
   padding: 16px;
   border-radius: 1rem;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
-  background-color: rgba(200, 200, 200, 0.3);
-  backdrop-filter: blur(0.2rem);
+  background-color: rgba(225, 225, 225, 0.1);
+  backdrop-filter: blur(10px) saturate(180%);
+  -webkit-backdrop-filter: blur(10px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.3);
   text-align: center;
   cursor: pointer;
   text-decoration: none;
@@ -277,10 +271,26 @@ export default {
   flex-direction: column;
 }
 
+.card-link:hover {
+  backdrop-filter: blur(10px) saturate(180%);
+  -webkit-backdrop-filter: blur(10px) saturate(180%);
+  background-color: rgba(220, 220, 220, .6);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
 .card-link.dark {
-  background-color: rgba(0, 0, 0, 0.4);
-  backdrop-filter: blur(0.2rem);
+  background-color: rgba(20, 20, 20, 0.1);
+  backdrop-filter: blur(10px) saturate(180%);
+  -webkit-backdrop-filter: blur(10px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.3);
   color: #fff;
+}
+
+.card-link.dark:hover {
+  backdrop-filter: blur(10px) saturate(180%);
+  -webkit-backdrop-filter: blur(10px) saturate(180%);
+  background-color: rgba(10, 10, 10, .6);
+  border: 1px solid rgba(255, 255, 255, 0.3);
 }
 
 .option-app {
@@ -314,13 +324,15 @@ export default {
 
 .card-link img {
   width: 100%;
-  max-width: 40px;
+  max-width: 50px;
+  height: 100%;
+  height: 50px;
   border-radius: 0.4rem;
-  margin-bottom: 8px;
 }
 
 .card-link img.small {
-  max-width: 50px;
+  max-width: 55px;
+  height: 55px;
 }
 
 .column {
