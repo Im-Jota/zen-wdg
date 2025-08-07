@@ -1,6 +1,6 @@
 {
   "name": "zen-wdg",
-  "version": "2.2.4",
+  "version": "2.2.5",
   "description": "Minimal widget library for Gridstack-based newtab extensions",
   "main": "dist/zen-wdg.umd.js",
   "module": "dist/zen-wdg.es.js",
