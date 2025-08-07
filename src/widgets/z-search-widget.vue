@@ -54,6 +54,7 @@ export default {
 
 <style scoped>
 .container-search {
+  width: 100%;
   backdrop-filter: blur(10px) saturate(180%);
   -webkit-backdrop-filter: blur(10px) saturate(180%);
   background-color: rgba(20, 20, 20, 0.1) !important;
