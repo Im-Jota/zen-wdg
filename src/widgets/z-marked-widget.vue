@@ -86,22 +86,75 @@ export default {
 
     const defaultBookmarks = {
       Personal: [
-        { title: 'Reddit', url: 'https://reddit.com', logo: 'https://www.google.com/s2/favicons?domain=reddit.com&sz=64' },
-        { title: 'Spotify', url: 'https://spotify.com', logo: 'https://www.google.com/s2/favicons?domain=spotify.com&sz=64' },
-        { title: 'Youtube', url: 'https://youtube.com', logo: 'https://www.google.com/s2/favicons?domain=youtube.com&sz=64' },
-        { title: 'Instagram', url: 'https://instagram.com', logo: 'https://www.google.com/s2/favicons?domain=instagram.com&sz=64' },
-        { title: 'Facebook', url: 'https://facebook.com', logo: 'https://www.google.com/s2/favicons?domain=facebook.com&sz=64' },
-        { title: 'WhatsApp', url: 'https://whatsapp.com', logo: 'https://www.google.com/s2/favicons?domain=whatsapp.com&sz=64' },
-        { title: 'Telegram', url: 'https://web.telegram.org/', logo: 'https://www.google.com/s2/favicons?domain=web.telegram.org&sz=64' },
-        { title: 'Spotify', url: 'https://spotify.com', logo: 'https://www.google.com/s2/favicons?domain=spotify.com&sz=64' }
+        {
+          title: 'Astian',
+          url: 'https://astian.org/',
+          logo: 'https://www.google.com/s2/favicons?domain=astian.org&sz=64'
+        },
+        { 
+          title: 'Amazon',
+          url: 'https://r.v2i8b.com/api/v1/bid/redirect?campaign_id=01JVSM9HD56Q0VD2QZXQ2AR505&url=https%3A%2F%2Famazon.com',
+          logo: 'https://www.google.com/s2/favicons?domain=amazon.com&sz=64'
+        },
+        {
+          title: 'Avast',
+          url: 'https://r.v2i8b.com/api/v1/bid/redirect?campaign_id=01JVSM8H9350F4CBP07A8V7C5T&url=http%3A%2F%2Favast.com%2F',
+          logo: 'https://www.google.com/s2/favicons?domain=avast.com&sz=64'
+        },
+        {
+          title: 'Youtube',
+          url: 'https://youtube.com',
+          logo: 'https://www.google.com/s2/favicons?domain=youtube.com&sz=64'
+        },
+        {
+          title: 'Instagram',
+          url: 'https://instagram.com',
+          logo: 'https://www.google.com/s2/favicons?domain=instagram.com&sz=64'
+        },
+        {
+          title: 'Wish.com',
+          url: 'https://r.v2i8b.com/api/v1/bid/redirect?campaign_id=01JVSM8H9350F4CBP07A8V7C5T&url=http%3A%2F%2Fwish.com',
+          logo: 'https://www.google.com/s2/favicons?domain=wish.com&sz=64'
+        },
+        { 
+          title: 'Prime',
+          url: 'https://r.v2i8b.com/api/v1/bid/redirect?campaign_id=01JVSM8H9350F4CBP07A8V7C5T&url=http%3A%2F%2Fprimevideo.com',
+          logo: 'https://www.google.com/s2/favicons?domain=primevideo.com&sz=64'
+        },
+        { 
+          title: 'Shein',
+          url: 'https://r.v2i8b.com/api/v1/bid/redirect?campaign_id=01JVSM8H9350F4CBP07A8V7C5T&url=http%3A%2F%2Fshein.com',
+          logo: 'https://www.google.com/s2/favicons?domain=shein.com&sz=64'
+        }
       ],
       Work: [
-        { title: 'GitHub', url: 'https://github.com', logo: 'https://www.google.com/s2/favicons?domain=github.com&sz=64' },
-        { title: 'Notion', url: 'https://notion.so', logo: 'https://www.google.com/s2/favicons?domain=notion.so&sz=64' }
+        { 
+          title: 'GitHub',
+          url: 'https://github.com',
+          logo: 'https://www.google.com/s2/favicons?domain=github.com&sz=64'
+        },
+        {
+          title: 'Notion',
+          url: 'https://notion.so',
+          logo: 'https://www.google.com/s2/favicons?domain=notion.so&sz=64'
+        }
       ],
       Study: [
-        { title: 'MDN Web Docs', url: 'https://developer.mozilla.org', logo: 'https://www.google.com/s2/favicons?domain=mozilla.org&sz=64' },
-        { title: 'FreeCodeCamp', url: 'https://freecodecamp.org', logo: 'https://www.google.com/s2/favicons?domain=freecodecamp.org&sz=64' }
+        {
+          title: 'MDN Web Docs',
+          url: 'https://developer.mozilla.org',
+          logo: 'https://www.google.com/s2/favicons?domain=mozilla.org&sz=64'
+        },
+        {
+          title: 'FreeCodeCamp',
+          url: 'https://freecodecamp.org',
+          logo: 'https://www.google.com/s2/favicons?domain=freecodecamp.org&sz=64'
+        },
+        {
+          title: 'Udemy',
+          url: 'https://r.v2i8b.com/api/v1/bid/redirect?campaign_id=01JVSM8H9350F4CBP07A8V7C5T&url=http%3A%2F%2Fudemy.com%2F',
+          logo: 'https://www.google.com/s2/favicons?domain=udemy.com&sz=64'
+        }
       ]
     };
 
