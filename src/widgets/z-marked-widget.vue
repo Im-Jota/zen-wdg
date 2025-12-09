@@ -32,10 +32,10 @@
               class="logo-container"
             >
               <img
-                :src="item.logo"
+                :src="getFaviconUrl(item)"
                 :alt="item.title + ' logo'"
                 :class="{ small: small }"
-                @error="onImageError($event, item.title)"
+                @error="onImageError($event, item)"
               />
             </div>
             {{ item.title }}
@@ -89,71 +89,71 @@ export default {
         {
           title: 'Astian',
           url: 'https://astian.org/',
-          logo: 'https://www.google.com/s2/favicons?domain=astian.org&sz=64'
+          domain: 'astian.org'
         },
         { 
           title: 'Amazon',
           url: 'https://r.v2i8b.com/api/v1/bid/redirect?campaign_id=01JVSM9HD56Q0VD2QZXQ2AR505&url=https%3A%2F%2Famazon.com',
-          logo: 'https://www.google.com/s2/favicons?domain=amazon.com&sz=64'
+          domain: 'amazon.com'
         },
         {
           title: 'Avast',
           url: 'https://r.v2i8b.com/api/v1/bid/redirect?campaign_id=01JVSM8H9350F4CBP07A8V7C5T&url=http%3A%2F%2Favast.com%2F',
-          logo: 'https://www.google.com/s2/favicons?domain=avast.com&sz=64'
+          domain: 'avast.com'
         },
         {
           title: 'Youtube',
           url: 'https://youtube.com',
-          logo: 'https://www.google.com/s2/favicons?domain=youtube.com&sz=64'
+          domain: 'youtube.com'
         },
         {
           title: 'Instagram',
           url: 'https://instagram.com',
-          logo: 'https://www.google.com/s2/favicons?domain=instagram.com&sz=64'
+          domain: 'instagram.com'
         },
         {
           title: 'Wish.com',
           url: 'https://r.v2i8b.com/api/v1/bid/redirect?campaign_id=01JVSM8H9350F4CBP07A8V7C5T&url=http%3A%2F%2Fwish.com',
-          logo: 'https://www.google.com/s2/favicons?domain=wish.com&sz=64'
+          domain: 'wish.com'
         },
         { 
           title: 'Prime',
           url: 'https://r.v2i8b.com/api/v1/bid/redirect?campaign_id=01JVSM8H9350F4CBP07A8V7C5T&url=http%3A%2F%2Fprimevideo.com',
-          logo: 'https://www.google.com/s2/favicons?domain=primevideo.com&sz=64'
+          domain: 'primevideo.com'
         },
         { 
           title: 'Shein',
           url: 'https://r.v2i8b.com/api/v1/bid/redirect?campaign_id=01JVSM8H9350F4CBP07A8V7C5T&url=http%3A%2F%2Fshein.com',
-          logo: 'https://www.google.com/s2/favicons?domain=shein.com&sz=64'
+          domain: 'shein.com'
         }
       ],
       Work: [
         { 
           title: 'GitHub',
           url: 'https://github.com',
-          logo: 'https://www.google.com/s2/favicons?domain=github.com&sz=64'
+          domain: 'github.com'
         },
         {
           title: 'Notion',
           url: 'https://notion.so',
-          logo: 'https://www.google.com/s2/favicons?domain=notion.so&sz=64'
+          domain: 'notion.so'
         }
       ],
       Study: [
         {
           title: 'MDN Web Docs',
           url: 'https://developer.mozilla.org',
-          logo: 'https://www.google.com/s2/favicons?domain=mozilla.org&sz=64'
+          domain: 'mozilla.org'
         },
         {
           title: 'FreeCodeCamp',
           url: 'https://freecodecamp.org',
-          logo: 'https://www.google.com/s2/favicons?domain=freecodecamp.org&sz=64'
+          domain: 'freecodecamp.org'
         },
         {
           title: 'Udemy',
           url: 'https://r.v2i8b.com/api/v1/bid/redirect?campaign_id=01JVSM8H9350F4CBP07A8V7C5T&url=http%3A%2F%2Fudemy.com%2F',
-          logo: 'https://www.google.com/s2/favicons?domain=udemy.com&sz=64'
+          domain: 'udemy.com'
         }
       ]
     };
@@ -165,7 +165,8 @@ export default {
     return {
       STORAGE_KEY,
       bookmarks,
-      activeTab: 'Personal'
+      activeTab: 'Personal',
+      faviconAttempts: {}
     };
   },
   computed: {
@@ -204,7 +205,8 @@ export default {
       if (newUrl === null) return;
       item.title = newTitle;
       item.url = newUrl;
-      item.logo = `https://www.google.com/s2/favicons?domain=${new URL(newUrl).hostname}&sz=64`;
+      item.domain = new URL(newUrl).hostname;
+      delete item.logo; // Limpiar logo antiguo para regeneración
       this.saveState();
     },
     addBookmarkPrompt() {
@@ -212,16 +214,65 @@ export default {
       if (!title) return;
       const url = prompt('URL del marcador:');
       if (!url) return;
-      const logo = `https://www.google.com/s2/favicons?domain=${new URL(url).hostname}&sz=64`;
-      this.bookmarks[this.activeTab].push({ title, url, logo });
+      const domain = new URL(url).hostname;
+      this.bookmarks[this.activeTab].push({ title, url, domain });
       this.saveState();
     },
-    onImageError(event, title) {
+    getFaviconUrl(item) {
+      // Si ya existe logo guardado, usarlo
+      if (item.logo) return item.logo;
+      
+      const domain = item.domain || this.extractDomain(item.url);
+      const attempt = this.faviconAttempts[domain] || 0;
+      
+      // Lista de servicios de favicon en orden de prioridad
+      const services = [
+        `https://icons.duckduckgo.com/ip3/${domain}.ico`,
+        `https://www.google.com/s2/favicons?domain=${domain}&sz=128`,
+        `https://logo.clearbit.com/${domain}`,
+        `https://favicons.githubusercontent.com/${domain}`,
+        `https://${domain}/favicon.ico`
+      ];
+      
+      return services[Math.min(attempt, services.length - 1)];
+    },
+    
+    extractDomain(url) {
+      try {
+        return new URL(url).hostname;
+      } catch {
+        return url;
+      }
+    },
+    
+    onImageError(event, item) {
       const img = event.target;
-      img.style.display = 'none';
-      const iconContainer = img.parentNode;
-      iconContainer.style.backgroundColor = '#066D5A';
-      iconContainer.textContent = title.charAt(0).toUpperCase();
+      const domain = item.domain || this.extractDomain(item.url);
+      const currentAttempt = this.faviconAttempts[domain] || 0;
+      
+      // Máximo 5 intentos (todos los servicios)
+      if (currentAttempt < 4) {
+        // Intentar siguiente servicio
+        this.faviconAttempts[domain] = currentAttempt + 1;
+        img.src = this.getFaviconUrl(item);
+      } else {
+        // Fallback final: mostrar letra inicial
+        img.style.display = 'none';
+        const iconContainer = img.parentNode;
+        
+        // Generar color basado en el título
+        const colors = ['#066D5A', '#0891b2', '#7c3aed', '#dc2626', '#ea580c', '#ca8a04', '#16a34a'];
+        const colorIndex = item.title.charCodeAt(0) % colors.length;
+        
+        iconContainer.style.backgroundColor = colors[colorIndex];
+        iconContainer.style.display = 'flex';
+        iconContainer.style.alignItems = 'center';
+        iconContainer.style.justifyContent = 'center';
+        iconContainer.style.fontSize = '1.5rem';
+        iconContainer.style.fontWeight = 'bold';
+        iconContainer.style.color = 'white';
+        iconContainer.textContent = item.title.charAt(0).toUpperCase();
+      }
     }
   },
   watch: {
@@ -375,12 +426,28 @@ export default {
   font-size: 1rem;
 }
 
+.logo-container {
+  width: 50px;
+  height: 50px;
+  border-radius: 0.4rem;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.card.small .logo-container {
+  width: 55px;
+  height: 55px;
+}
+
 .card-link img {
   width: 100%;
   max-width: 50px;
   height: 100%;
   height: 50px;
   border-radius: 0.4rem;
+  object-fit: cover;
 }
 
 .card-link img.small {
