@@ -31,7 +31,7 @@ export default {
           id: 2,
           logo: 'https://astian.org/wp-content/uploads/2025/06/favicon-1.png',
           label: 'MidoriGO',
-          search: 'https://astiango.co/?q='
+          search: 'https://astiango.com/?q='
         }
       ],
       engine: {
