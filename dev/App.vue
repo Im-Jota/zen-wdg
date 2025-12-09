@@ -119,6 +119,7 @@ import ZTodoWidget from '../src/widgets/z-todo-widget.vue'
 import ZMarkedWidget from '../src/widgets/z-marked-widget.vue'
 import ZCalendarWidget from '../src/widgets/z-calendar-widget.vue'
 import ZWeatherWidget from '../src/widgets/z-weather-widget.vue'
+import ZNotesWidget from '../src/widgets/z-notes-widget.vue'
 
 export default {
   name: 'WidgetGallery',
@@ -128,7 +129,8 @@ export default {
     ZTodoWidget,
     ZMarkedWidget,
     ZCalendarWidget,
-    ZWeatherWidget
+    ZWeatherWidget,
+    ZNotesWidget
   },
   data() {
     return {
@@ -189,6 +191,15 @@ export default {
           status: 'stable',
           description: 'Widget de clima en tiempo real con geolocalización automática',
           file: 'z-weather-widget.vue'
+        },
+        {
+          name: 'z-notes-widget',
+          title: '📝 Notas',
+          component: 'ZNotesWidget',
+          category: 'Productividad',
+          status: 'stable',
+          description: 'Notas rápidas con categorías, fijación y exportación a texto',
+          file: 'z-notes-widget.vue'
         }
       ]
     }
