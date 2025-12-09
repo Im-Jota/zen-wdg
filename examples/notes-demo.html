@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>📝 Notes Widget - Demo</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .header {
+      text-align: center;
+      color: white;
+      margin-bottom: 2rem;
+    }
+
+    .header h1 {
+      font-size: 3rem;
+      margin-bottom: 0.5rem;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+    }
+
+    .header p {
+      font-size: 1.2rem;
+      opacity: 0.9;
+    }
+
+    .demo-controls {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      border-radius: 1rem;
+      padding: 1.5rem;
+      margin-bottom: 2rem;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+    }
+
+    .controls-row {
+      display: flex;
+      gap: 1rem;
+      align-items: center;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .info-btn {
+      padding: 0.5rem 1rem;
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      border-radius: 0.5rem;
+      cursor: pointer;
+      font-weight: 600;
+      transition: all 0.3s;
+    }
+
+    .info-btn:hover {
+      background: rgba(255, 255, 255, 0.3);
+      transform: translateY(-2px);
+    }
+
+    .notes-wrapper {
+      background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(20px);
+      border-radius: 1.5rem;
+      padding: 2rem;
+      min-height: 600px;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+    }
+
+    .features {
+      margin-top: 2rem;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 1rem;
+    }
+
+    .feature-card {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      border-radius: 1rem;
+      padding: 1.5rem;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      color: white;
+    }
+
+    .feature-card h3 {
+      margin-bottom: 0.5rem;
+      font-size: 1.3rem;
+    }
+
+    .feature-card ul {
+      list-style: none;
+      padding-left: 0;
+    }
+
+    .feature-card li {
+      padding: 0.25rem 0;
+      padding-left: 1.5rem;
+      position: relative;
+    }
+
+    .feature-card li:before {
+      content: "✓";
+      position: absolute;
+      left: 0;
+      color: #4ade80;
+      font-weight: bold;
+    }
+
+    .footer {
+      text-align: center;
+      color: white;
+      margin-top: 2rem;
+      padding: 1rem;
+      opacity: 0.8;
+    }
+
+    .notice-box {
+      background: rgba(59, 130, 246, 0.2);
+      border: 1px solid rgba(59, 130, 246, 0.5);
+      border-radius: 0.75rem;
+      padding: 1rem;
+      margin-bottom: 1rem;
+      color: white;
+    }
+
+    .notice-box strong {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-size: 1.1rem;
+    }
+
+    .quick-tips {
+      background: rgba(16, 185, 129, 0.2);
+      border: 1px solid rgba(16, 185, 129, 0.5);
+      border-radius: 0.75rem;
+      padding: 1rem;
+      color: white;
+      margin-top: 1rem;
+    }
+
+    .quick-tips strong {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-size: 1rem;
+    }
+
+    .quick-tips ul {
+      list-style: none;
+      padding-left: 0;
+    }
+
+    .quick-tips li {
+      padding: 0.25rem 0;
+      padding-left: 1.5rem;
+      position: relative;
+    }
+
+    .quick-tips li:before {
+      content: "💡";
+      position: absolute;
+      left: 0;
+    }
+
+    @media (max-width: 768px) {
+      .header h1 {
+        font-size: 2rem;
+      }
+
+      .header p {
+        font-size: 1rem;
+      }
+
+      .notes-wrapper {
+        padding: 1rem;
+        min-height: 500px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>📝 Notes Widget</h1>
+      <p>Notas rápidas con categorías, fijación y exportación</p>
+    </div>
+
+    <div class="demo-controls">
+      <div class="notice-box">
+        <strong>💾 Almacenamiento Local</strong>
+        <p>Tus notas se guardan automáticamente en tu navegador. No se envían a ningún servidor. Todo es privado y permanece en tu dispositivo.</p>
+      </div>
+      
+      <div class="quick-tips">
+        <strong>🚀 Tips Rápidos:</strong>
+        <ul>
+          <li>Click en ➕ para crear una nueva nota</li>
+          <li>Usa 🏷️ para gestionar categorías personalizadas</li>
+          <li>Click en 📍 para fijar notas importantes</li>
+          <li>Exporta con 💾 para guardar un archivo .txt</li>
+        </ul>
+      </div>
+
+      <div class="controls-row">
+        <button class="info-btn" onclick="showInfo()">
+          ℹ️ Información
+        </button>
+        <button class="info-btn" onclick="showFeatures()">
+          ✨ Características
+        </button>
+        <button class="info-btn" onclick="clearAllNotes()">
+          🗑️ Limpiar Demo
+        </button>
+        <button class="info-btn" onclick="loadSampleNotes()">
+          📋 Cargar Ejemplos
+        </button>
+      </div>
+    </div>
+
+    <div class="notes-wrapper">
+      <z-notes-widget id="notes"></z-notes-widget>
+    </div>
+
+    <div class="features">
+      <div class="feature-card">
+        <h3>📝 Notas Rápidas</h3>
+        <ul>
+          <li>Crea notas instantáneamente</li>
+          <li>Con título y contenido</li>
+          <li>Guardado automático</li>
+          <li>Sin límite de notas</li>
+        </ul>
+      </div>
+
+      <div class="feature-card">
+        <h3>🏷️ Categorías</h3>
+        <ul>
+          <li>Crea categorías personalizadas</li>
+          <li>Colores únicos por categoría</li>
+          <li>Filtra por categoría</li>
+          <li>Gestión fácil de categorías</li>
+        </ul>
+      </div>
+
+      <div class="feature-card">
+        <h3>📌 Fijación</h3>
+        <ul>
+          <li>Fija notas importantes</li>
+          <li>Aparecen siempre primero</li>
+          <li>Indicador visual claro</li>
+          <li>Filtro de notas fijadas</li>
+        </ul>
+      </div>
+
+      <div class="feature-card">
+        <h3>💾 Exportación</h3>
+        <ul>
+          <li>Exporta a archivo de texto</li>
+          <li>Organizado por categorías</li>
+          <li>Incluye todas las notas</li>
+          <li>Formato legible y limpio</li>
+        </ul>
+      </div>
+
+      <div class="feature-card">
+        <h3>🔍 Filtros</h3>
+        <ul>
+          <li>Filtra por categoría</li>
+          <li>Ver solo notas fijadas</li>
+          <li>Ordenar por fecha o título</li>
+          <li>Búsqueda visual rápida</li>
+        </ul>
+      </div>
+
+      <div class="feature-card">
+        <h3>🎨 Diseño Moderno</h3>
+        <ul>
+          <li>Interfaz limpia e intuitiva</li>
+          <li>Animaciones fluidas</li>
+          <li>Responsive para móviles</li>
+          <li>Tema oscuro elegante</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="footer">
+      <p>Zen Widget Library • Notes Widget Demo</p>
+      <p style="margin-top: 0.5rem; font-size: 0.9rem;">
+        100% Local • Sin servidor • Privado
+      </p>
+    </div>
+  </div>
+
+  <!-- Incluir el widget desde la build local o CDN -->
+  <script type="module">
+    // Modo de desarrollo: ajusta la ruta según tu estructura
+    // import '../dist/zen-wdg.es.js';
+    
+    // Por ahora, simularemos el componente hasta que se compile
+    console.log('Para usar este demo, ejecuta primero: npm run build');
+    console.log('Luego descomenta la línea de import arriba');
+  </script>
+
+  <script>
+    function showInfo() {
+      alert(`ℹ️ INFORMACIÓN DEL WIDGET DE NOTAS
+
+📝 DESCRIPCIÓN:
+Widget completo de notas rápidas (sticky notes)
+con sistema de organización avanzado.
+
+✨ CARACTERÍSTICAS PRINCIPALES:
+• Creación rápida de notas
+• Sistema de categorías personalizable
+• Fijación de notas importantes
+• Exportación a archivo de texto
+• Filtros y ordenamiento
+• Almacenamiento local automático
+
+💾 ALMACENAMIENTO:
+Tus notas se guardan en el almacenamiento local
+de tu navegador (localStorage). No se envían a
+ningún servidor externo. Son 100% privadas.
+
+🏷️ CATEGORÍAS:
+Puedes crear categorías con colores personalizados
+para organizar mejor tus notas. Ideal para separar
+trabajo, personal, urgente, ideas, etc.
+
+📌 FIJACIÓN:
+Las notas importantes pueden fijarse para que
+aparezcan siempre al principio de la lista.
+
+🔒 PRIVACIDAD:
+• Sin servidor
+• Sin registro
+• Sin tracking
+• 100% local`);
+    }
+
+    function showFeatures() {
+      alert(`✨ CARACTERÍSTICAS DETALLADAS
+
+📝 NOTAS:
+• Título y contenido ilimitado
+• Creación instantánea
+• Edición rápida (próximamente)
+• Eliminación con confirmación
+• Vista de tarjeta o lista
+
+🏷️ CATEGORÍAS:
+• Categorías ilimitadas
+• Colores personalizables
+• Fácil gestión
+• Filtrado por categoría
+• Indicadores visuales
+
+📌 FIJACIÓN:
+• Un click para fijar/desfijar
+• Visual distintivo
+• Siempre al principio
+• Filtro de fijadas
+
+🔍 FILTROS Y ORDEN:
+• Ver todas las notas
+• Solo notas fijadas
+• Por categoría específica
+• Ordenar por fecha
+• Ordenar por título
+• Ordenar por categoría
+
+💾 EXPORTACIÓN:
+• Archivo .txt descargable
+• Organizado por categorías
+• Incluye fechas
+• Indica notas fijadas
+• Formato legible
+
+📊 ESTADÍSTICAS:
+• Contador de notas totales
+• Contador de notas fijadas
+• Visible en todo momento`);
+    }
+
+    function clearAllNotes() {
+      if (confirm('⚠️ ¿Deseas eliminar TODAS las notas de demostración?\n\nEsta acción no se puede deshacer.')) {
+        localStorage.removeItem('zen-notes-widget');
+        localStorage.removeItem('zen-notes-categories');
+        alert('✅ Notas eliminadas. Recarga la página para ver los cambios.');
+        location.reload();
+      }
+    }
+
+    function loadSampleNotes() {
+      const sampleNotes = [
+        {
+          id: Date.now().toString() + '1',
+          title: 'Reunión de equipo',
+          content: 'Discutir el progreso del proyecto Q1 y asignar nuevas tareas. Preparar presentación para stakeholders.',
+          categoryId: 'work',
+          isPinned: true,
+          createdAt: new Date().toISOString()
+        },
+        {
+          id: Date.now().toString() + '2',
+          title: 'Lista de compras',
+          content: 'Leche, pan, huevos, frutas, verduras, café, pasta, queso.',
+          categoryId: 'personal',
+          isPinned: false,
+          createdAt: new Date(Date.now() - 3600000).toISOString()
+        },
+        {
+          id: Date.now().toString() + '3',
+          title: 'Ideas para el blog',
+          content: '1. Tutorial de Vue 3\n2. Web Components guide\n3. localStorage best practices\n4. Modern CSS techniques',
+          categoryId: 'ideas',
+          isPinned: false,
+          createdAt: new Date(Date.now() - 7200000).toISOString()
+        },
+        {
+          id: Date.now().toString() + '4',
+          title: 'Recordatorios importantes',
+          content: 'Renovar certificado SSL antes del viernes. Backup de base de datos. Actualizar dependencias del proyecto.',
+          categoryId: 'work',
+          isPinned: true,
+          createdAt: new Date(Date.now() - 86400000).toISOString()
+        },
+        {
+          id: Date.now().toString() + '5',
+          title: 'Libros para leer',
+          content: '📚 "Clean Code" - Robert C. Martin\n📚 "The Pragmatic Programmer"\n📚 "You Don\'t Know JS"',
+          categoryId: 'personal',
+          isPinned: false,
+          createdAt: new Date(Date.now() - 172800000).toISOString()
+        }
+      ];
+
+      const sampleCategories = [
+        { id: 'default', name: 'Sin categoría', color: '#6b7280' },
+        { id: 'work', name: 'Trabajo', color: '#3b82f6' },
+        { id: 'personal', name: 'Personal', color: '#10b981' },
+        { id: 'ideas', name: 'Ideas', color: '#8b5cf6' },
+        { id: 'urgent', name: 'Urgente', color: '#ef4444' }
+      ];
+
+      try {
+        localStorage.setItem('zen-notes-widget', JSON.stringify(sampleNotes));
+        localStorage.setItem('zen-notes-categories', JSON.stringify(sampleCategories));
+        alert('✅ Notas de ejemplo cargadas!\n\nRecarga la página para verlas.');
+        location.reload();
+      } catch (e) {
+        alert('❌ Error al cargar notas de ejemplo: ' + e.message);
+      }
+    }
+
+    // Mensaje de bienvenida
+    window.addEventListener('load', () => {
+      console.log(`
+╔═══════════════════════════════════════════════╗
+║                                               ║
+║         📝 NOTES WIDGET DEMO                  ║
+║                                               ║
+║  Widget de notas rápidas con organización     ║
+║  avanzada y exportación:                      ║
+║                                               ║
+║  ✓ Crea notas instantáneamente               ║
+║  ✓ Organiza con categorías personalizables   ║
+║  ✓ Fija las notas importantes                ║
+║  ✓ Exporta a archivo de texto                ║
+║  ✓ Filtra y ordena fácilmente                ║
+║  ✓ 100% privado (almacenamiento local)       ║
+║                                               ║
+║  ¡Empieza creando tu primera nota!           ║
+║                                               ║
+╚═══════════════════════════════════════════════╝
+      `);
+
+      // Verificar disponibilidad de localStorage
+      if (typeof(Storage) !== "undefined") {
+        console.log('✅ localStorage disponible');
+        
+        // Mostrar estadísticas si hay notas guardadas
+        const notes = JSON.parse(localStorage.getItem('zen-notes-widget') || '[]');
+        if (notes.length > 0) {
+          console.log(`📊 Tienes ${notes.length} nota(s) guardada(s)`);
+          const pinned = notes.filter(n => n.isPinned).length;
+          if (pinned > 0) {
+            console.log(`📌 ${pinned} nota(s) fijada(s)`);
+          }
+        } else {
+          console.log('💡 Tip: Click en "📋 Cargar Ejemplos" para ver notas de demostración');
+        }
+      } else {
+        console.warn('⚠️ localStorage no disponible en este navegador');
+      }
+    });
+
+    // Guardar estadísticas al descargar
+    window.addEventListener('beforeunload', () => {
+      const notes = JSON.parse(localStorage.getItem('zen-notes-widget') || '[]');
+      if (notes.length > 0) {
+        console.log(`💾 Guardando ${notes.length} notas...`);
+      }
+    });
+  </script>
+</body>
+</html>
