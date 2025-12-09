@@ -4,11 +4,13 @@ import ClockWidget from './widgets/z-clock-widget.vue';
 import SearchWidget from './widgets/z-search-widget.vue';
 import TodoWidget from './widgets/z-todo-widget.vue';
 import MarkedWidget from './widgets/z-marked-widget.vue';
+import CalendarWidget from './widgets/z-calendar-widget.vue';
 
 export const ZClockWidget = defineCustomElement(ClockWidget);
 export const ZSearchWidget = defineCustomElement(SearchWidget);
 export const ZTodoWidget = defineCustomElement(TodoWidget);
 export const ZMarkedWidget = defineCustomElement(MarkedWidget);
+export const ZCalendarWidget = defineCustomElement(CalendarWidget);
 
 export function registerAllWidgets() {
   if (!customElements.get('z-clock-widget')) {
@@ -25,5 +27,8 @@ export function registerAllWidgets() {
 
   if (!customElements.get('z-marked-widget')) {
     customElements.define('z-marked-widget', ZMarkedWidget);
+  }
+  if (!customElements.get('z-calendar-widget')) {
+    customElements.define('z-calendar-widget', ZCalendarWidget);
   }
 }

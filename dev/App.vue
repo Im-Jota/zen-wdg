@@ -117,6 +117,7 @@ import ZClockWidget from '../src/widgets/z-clock-widget.vue'
 import ZSearchWidget from '../src/widgets/z-search-widget.vue'
 import ZTodoWidget from '../src/widgets/z-todo-widget.vue'
 import ZMarkedWidget from '../src/widgets/z-marked-widget.vue'
+import ZCalendarWidget from '../src/widgets/z-calendar-widget.vue'
 
 export default {
   name: 'WidgetGallery',
@@ -124,7 +125,8 @@ export default {
     ZClockWidget,
     ZSearchWidget,
     ZTodoWidget,
-    ZMarkedWidget
+    ZMarkedWidget,
+    ZCalendarWidget
   },
   data() {
     return {
@@ -161,12 +163,21 @@ export default {
         },
         {
           name: 'z-marked-widget',
-          title: '📄 Markdown',
+          title: '📄 Marcadores',
           component: 'ZMarkedWidget',
-          category: 'Contenido',
+          category: 'Navegación',
           status: 'stable',
-          description: 'Visualizador y editor de contenido Markdown',
+          description: 'Gestor de marcadores con categorías y favicons inteligentes',
           file: 'z-marked-widget.vue'
+        },
+        {
+          name: 'z-calendar-widget',
+          title: '📅 Calendario',
+          component: 'ZCalendarWidget',
+          category: 'Productividad',
+          status: 'stable',
+          description: 'Calendario con eventos, vistas múltiples y almacenamiento local',
+          file: 'z-calendar-widget.vue'
         }
       ]
     }
@@ -368,6 +379,11 @@ export default {
   align-items: center;
   justify-content: center;
   flex: 1;
+  overflow: hidden;
+}
+
+.view-full .widget-preview {
+  min-height: 600px;
 }
 
 .widget-info {
