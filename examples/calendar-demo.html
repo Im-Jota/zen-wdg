@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>📅 Calendar Widget - Demo</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    .header {
+      text-align: center;
+      color: white;
+      margin-bottom: 2rem;
+    }
+
+    .header h1 {
+      font-size: 3rem;
+      margin-bottom: 0.5rem;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+    }
+
+    .header p {
+      font-size: 1.2rem;
+      opacity: 0.9;
+    }
+
+    .demo-controls {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      border-radius: 1rem;
+      padding: 1.5rem;
+      margin-bottom: 2rem;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+    }
+
+    .controls-row {
+      display: flex;
+      gap: 1rem;
+      align-items: center;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .control-group {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: white;
+    }
+
+    .control-group label {
+      font-weight: 600;
+    }
+
+    .theme-switch {
+      position: relative;
+      width: 60px;
+      height: 30px;
+    }
+
+    .theme-switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
+    .slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: #ccc;
+      transition: .4s;
+      border-radius: 30px;
+    }
+
+    .slider:before {
+      position: absolute;
+      content: "";
+      height: 22px;
+      width: 22px;
+      left: 4px;
+      bottom: 4px;
+      background-color: white;
+      transition: .4s;
+      border-radius: 50%;
+    }
+
+    input:checked + .slider {
+      background-color: #066D5A;
+    }
+
+    input:checked + .slider:before {
+      transform: translateX(30px);
+    }
+
+    .info-btn {
+      padding: 0.5rem 1rem;
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      border-radius: 0.5rem;
+      cursor: pointer;
+      font-weight: 600;
+      transition: all 0.3s;
+    }
+
+    .info-btn:hover {
+      background: rgba(255, 255, 255, 0.3);
+      transform: translateY(-2px);
+    }
+
+    .calendar-wrapper {
+      background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(20px);
+      border-radius: 1.5rem;
+      padding: 1rem;
+      min-height: 700px;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    }
+
+    .features {
+      margin-top: 2rem;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 1rem;
+    }
+
+    .feature-card {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      border-radius: 1rem;
+      padding: 1.5rem;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      color: white;
+    }
+
+    .feature-card h3 {
+      margin-bottom: 0.5rem;
+      font-size: 1.3rem;
+    }
+
+    .feature-card ul {
+      list-style: none;
+      padding-left: 0;
+    }
+
+    .feature-card li {
+      padding: 0.25rem 0;
+      padding-left: 1.5rem;
+      position: relative;
+    }
+
+    .feature-card li:before {
+      content: "✓";
+      position: absolute;
+      left: 0;
+      color: #4ade80;
+      font-weight: bold;
+    }
+
+    .footer {
+      text-align: center;
+      color: white;
+      margin-top: 2rem;
+      padding: 1rem;
+      opacity: 0.8;
+    }
+
+    @media (max-width: 768px) {
+      .header h1 {
+        font-size: 2rem;
+      }
+
+      .header p {
+        font-size: 1rem;
+      }
+
+      .calendar-wrapper {
+        min-height: 500px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>📅 Calendar Widget</h1>
+      <p>Gestiona tus eventos con estilo</p>
+    </div>
+
+    <div class="demo-controls">
+      <div class="controls-row">
+        <div class="control-group">
+          <label for="theme-toggle">Tema Claro/Oscuro:</label>
+          <label class="theme-switch">
+            <input type="checkbox" id="theme-toggle" onchange="toggleTheme()">
+            <span class="slider"></span>
+          </label>
+        </div>
+        <button class="info-btn" onclick="showQuickGuide()">
+          📖 Guía Rápida
+        </button>
+        <button class="info-btn" onclick="clearEvents()">
+          🗑️ Limpiar Eventos
+        </button>
+      </div>
+    </div>
+
+    <div class="calendar-wrapper">
+      <z-calendar-widget
+        id="calendar"
+        theme="light"
+        use-storage="true"
+      ></z-calendar-widget>
+    </div>
+
+    <div class="features">
+      <div class="feature-card">
+        <h3>🎯 Vistas Múltiples</h3>
+        <ul>
+          <li>Vista de Día con horario completo</li>
+          <li>Vista Semanal con grid interactivo</li>
+          <li>Vista Mensual tipo calendario</li>
+          <li>Navegación rápida entre periodos</li>
+        </ul>
+      </div>
+
+      <div class="feature-card">
+        <h3>✨ Gestión de Eventos</h3>
+        <ul>
+          <li>Crear eventos con nombre personalizado</li>
+          <li>Definir hora de inicio y fin</li>
+          <li>8 colores para categorizar</li>
+          <li>Editar y eliminar fácilmente</li>
+        </ul>
+      </div>
+
+      <div class="feature-card">
+        <h3>🔁 Eventos Repetitivos</h3>
+        <ul>
+          <li>Repetición diaria automática</li>
+          <li>Eventos semanales recurrentes</li>
+          <li>Repetición mensual</li>
+          <li>Indicador visual de recurrencia</li>
+        </ul>
+      </div>
+
+      <div class="feature-card">
+        <h3>💾 Almacenamiento Local</h3>
+        <ul>
+          <li>Guardado automático en localStorage</li>
+          <li>Persistencia entre sesiones</li>
+          <li>No requiere servidor</li>
+          <li>100% privado y offline</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="footer">
+      <p>Zen Widget Library • Calendar Widget Demo</p>
+      <p style="margin-top: 0.5rem; font-size: 0.9rem;">
+        Haz clic en "+ Evento" para crear tu primer evento
+      </p>
+    </div>
+  </div>
+
+  <!-- Incluir el widget desde la build local o CDN -->
+  <script type="module">
+    // Modo de desarrollo: ajusta la ruta según tu estructura
+    // import '../dist/zen-wdg.es.js';
+    
+    // Por ahora, simularemos el componente hasta que se compile
+    console.log('Para usar este demo, ejecuta primero: npm run build');
+    console.log('Luego descomenta la línea de import arriba');
+  </script>
+
+  <script>
+    function toggleTheme() {
+      const calendar = document.getElementById('calendar');
+      const isChecked = document.getElementById('theme-toggle').checked;
+      calendar.setAttribute('theme', isChecked ? 'dark' : 'light');
+    }
+
+    function showQuickGuide() {
+      alert(`📖 GUÍA RÁPIDA DEL CALENDARIO
+
+🎯 VISTAS:
+• Día: Horario completo de 24 horas
+• Semana: Grid con 7 días
+• Mes: Calendario mensual tradicional
+
+✨ CREAR EVENTO:
+1. Clic en "+ Evento"
+2. Completa: nombre, fecha, horas
+3. Elige color
+4. Marca si es repetitivo
+5. Guarda
+
+🔁 REPETITIVOS:
+• Diario: Se repite cada día
+• Semanal: Mismo día de la semana
+• Mensual: Mismo día del mes
+
+✏️ EDITAR/ELIMINAR:
+• Clic en cualquier evento
+• Modifica campos
+• Usa "Eliminar" para borrar
+
+💡 TIPS:
+• Botón "Hoy" vuelve a fecha actual
+• Clic en día del mes → vista de día
+• Eventos se guardan automáticamente
+• Usa colores para organizar`);
+    }
+
+    function clearEvents() {
+      if (confirm('¿Seguro que quieres eliminar TODOS los eventos?\n\nEsta acción no se puede deshacer.')) {
+        localStorage.removeItem('calendar_widget_events');
+        alert('✅ Eventos eliminados. Recarga la página para ver los cambios.');
+        location.reload();
+      }
+    }
+
+    // Mensaje de bienvenida
+    window.addEventListener('load', () => {
+      console.log(`
+╔═══════════════════════════════════════════════╗
+║                                               ║
+║         📅 CALENDAR WIDGET DEMO               ║
+║                                               ║
+║  Widget de calendario con todas las           ║
+║  funcionalidades que necesitas:               ║
+║                                               ║
+║  ✓ Vistas: Día, Semana, Mes                  ║
+║  ✓ Eventos con horario                       ║
+║  ✓ Eventos repetitivos                       ║
+║  ✓ Almacenamiento local                      ║
+║  ✓ Temas claro/oscuro                        ║
+║                                               ║
+║  Haz clic en "+ Evento" para empezar         ║
+║                                               ║
+╚═══════════════════════════════════════════════╝
+      `);
+
+      // Verificar si hay eventos guardados
+      const savedEvents = localStorage.getItem('calendar_widget_events');
+      if (savedEvents) {
+        const events = JSON.parse(savedEvents);
+        console.log(`📊 Tienes ${events.length} evento(s) guardado(s)`);
+      } else {
+        console.log('💡 No hay eventos. ¡Crea tu primer evento!');
+      }
+    });
+  </script>
+</body>
+</html>
