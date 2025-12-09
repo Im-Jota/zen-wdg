@@ -190,33 +190,71 @@ export default {
         window.open(url, '_blank');
       }
     },
-    deleteBookmark(index) {
+    async deleteBookmark(index) {
       const item = this.bookmarks[this.activeTab][index];
-      if (confirm(`¿Estás seguro de eliminar ${item.title}?`)) {
+      const confirmed = await window.ZenModals.showDeleteConfirm(item.title);
+      if (confirmed) {
         this.bookmarks[this.activeTab].splice(index, 1);
         this.saveState();
       }
     },
-    editBookmark(index) {
+    async editBookmark(index) {
       const item = this.bookmarks[this.activeTab][index];
-      const newTitle = prompt('Nuevo título:', item.title);
-      if (newTitle === null) return;
-      const newUrl = prompt('Nueva URL:', item.url);
-      if (newUrl === null) return;
-      item.title = newTitle;
-      item.url = newUrl;
-      item.domain = new URL(newUrl).hostname;
-      delete item.logo; // Limpiar logo antiguo para regeneración
-      this.saveState();
+      
+      const newTitle = await window.ZenModals.showPrompt({
+        title: 'Editar Marcador',
+        message: 'Introduce el nuevo título:',
+        inputDefaultValue: item.title,
+        inputPlaceholder: 'Título del marcador'
+      });
+      
+      if (!newTitle) return;
+      
+      const newUrl = await window.ZenModals.showPrompt({
+        title: 'Editar URL',
+        message: 'Introduce la nueva URL:',
+        inputDefaultValue: item.url,
+        inputType: 'url',
+        inputPlaceholder: 'https://ejemplo.com'
+      });
+      
+      if (!newUrl) return;
+      
+      try {
+        item.title = newTitle;
+        item.url = newUrl;
+        item.domain = new URL(newUrl).hostname;
+        delete item.logo; // Limpiar logo antiguo para regeneración
+        this.saveState();
+      } catch (error) {
+        console.error('URL inválida:', error);
+      }
     },
-    addBookmarkPrompt() {
-      const title = prompt('Nombre del marcador:');
+    async addBookmarkPrompt() {
+      const title = await window.ZenModals.showPrompt({
+        title: 'Nuevo Marcador',
+        message: 'Introduce el nombre del marcador:',
+        inputPlaceholder: 'Nombre del sitio'
+      });
+      
       if (!title) return;
-      const url = prompt('URL del marcador:');
+      
+      const url = await window.ZenModals.showPrompt({
+        title: 'URL del Marcador',
+        message: 'Introduce la URL:',
+        inputType: 'url',
+        inputPlaceholder: 'https://ejemplo.com'
+      });
+      
       if (!url) return;
-      const domain = new URL(url).hostname;
-      this.bookmarks[this.activeTab].push({ title, url, domain });
-      this.saveState();
+      
+      try {
+        const domain = new URL(url).hostname;
+        this.bookmarks[this.activeTab].push({ title, url, domain });
+        this.saveState();
+      } catch (error) {
+        console.error('URL inválida:', error);
+      }
     },
     getFaviconUrl(item) {
       // Si ya existe logo guardado, usarlo

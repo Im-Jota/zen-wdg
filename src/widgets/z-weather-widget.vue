@@ -150,7 +150,19 @@ export default {
 
     async fetchLocationName(lat, lon) {
       try {
-        // Usar Nominatim de OpenStreetMap para geocodificación inversa
+        // Generar clave de cache basada en coordenadas redondeadas
+        const cacheKey = this.generateCacheKey(lat, lon);
+        
+        // Intentar obtener del cache primero
+        const cachedLocation = this.getLocationFromCache(cacheKey);
+        if (cachedLocation) {
+          this.locationName = cachedLocation;
+          console.log('📦 Ubicación obtenida del cache:', cachedLocation);
+          return;
+        }
+
+        // Si no está en cache, hacer request a Nominatim
+        console.log('🌐 Consultando Nominatim para ubicación...');
         const url = `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}&zoom=10`;
         
         const response = await fetch(url, {
@@ -162,12 +174,82 @@ export default {
         if (response.ok) {
           const data = await response.json();
           // Extraer ciudad o localidad
-          this.locationName = data.address.city || data.address.town || data.address.village || data.address.state || 'Tu ubicación';
+          const cityName = data.address.city || data.address.town || data.address.village || data.address.state || 'Tu ubicación';
+          this.locationName = cityName;
+          
+          // Guardar en cache
+          this.saveLocationToCache(cacheKey, cityName);
+          console.log('💾 Ubicación guardada en cache:', cityName);
         } else {
           this.locationName = 'Tu ubicación';
         }
       } catch (err) {
         this.locationName = 'Tu ubicación';
+      }
+    },
+
+    generateCacheKey(lat, lon) {
+      // Redondear a 2 decimales para agrupar ubicaciones cercanas (~1km de precisión)
+      const roundedLat = Math.round(lat * 100) / 100;
+      const roundedLon = Math.round(lon * 100) / 100;
+      return `${roundedLat},${roundedLon}`;
+    },
+
+    getLocationFromCache(cacheKey) {
+      try {
+        const cache = localStorage.getItem('weather_location_cache');
+        if (!cache) return null;
+        
+        const cacheData = JSON.parse(cache);
+        const entry = cacheData[cacheKey];
+        
+        if (!entry) return null;
+        
+        // Verificar si el cache ha expirado (30 días)
+        const now = Date.now();
+        const cacheAge = now - entry.timestamp;
+        const maxAge = 30 * 24 * 60 * 60 * 1000; // 30 días en milisegundos
+        
+        if (cacheAge > maxAge) {
+          // Cache expirado, eliminarlo
+          delete cacheData[cacheKey];
+          localStorage.setItem('weather_location_cache', JSON.stringify(cacheData));
+          return null;
+        }
+        
+        return entry.name;
+      } catch (err) {
+        console.warn('Error al leer cache de ubicaciones:', err);
+        return null;
+      }
+    },
+
+    saveLocationToCache(cacheKey, locationName) {
+      try {
+        let cacheData = {};
+        const existingCache = localStorage.getItem('weather_location_cache');
+        
+        if (existingCache) {
+          cacheData = JSON.parse(existingCache);
+        }
+        
+        // Guardar con timestamp
+        cacheData[cacheKey] = {
+          name: locationName,
+          timestamp: Date.now()
+        };
+        
+        // Limitar el tamaño del cache a 100 entradas
+        const entries = Object.entries(cacheData);
+        if (entries.length > 100) {
+          // Ordenar por timestamp y mantener solo las 100 más recientes
+          entries.sort((a, b) => b[1].timestamp - a[1].timestamp);
+          cacheData = Object.fromEntries(entries.slice(0, 100));
+        }
+        
+        localStorage.setItem('weather_location_cache', JSON.stringify(cacheData));
+      } catch (err) {
+        console.warn('Error al guardar en cache de ubicaciones:', err);
       }
     },
 

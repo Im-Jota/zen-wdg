@@ -375,9 +375,12 @@ export default {
         return hour >= startHour && hour < endHour;
       });
     },
-    saveEvent() {
-      if (!this.eventForm.name.trim()) {
-        alert('Por favor, ingresa un nombre para el evento');
+    async saveEvent() {
+      if (!this.eventForm.name) {
+        await window.ZenModals.showWarning({
+          title: 'Nombre requerido',
+          message: 'Por favor, ingresa un nombre para el evento'
+        });
         return;
       }
       
@@ -399,8 +402,9 @@ export default {
       this.eventForm = { ...event };
       this.showEventModal = true;
     },
-    deleteEvent() {
-      if (confirm('¿Estás seguro de eliminar este evento?')) {
+    async deleteEvent() {
+      const confirmed = await window.ZenModals.showDeleteConfirm('este evento');
+      if (confirmed) {
         this.events = this.events.filter(e => e.id !== this.editingEvent.id);
         this.saveEvents();
         this.closeModal();
