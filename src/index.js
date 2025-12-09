@@ -5,6 +5,10 @@ import ZTodoWidget from './widgets/z-todo-widget.vue'
 import ZMarkedWidget from './widgets/z-marked-widget.vue'
 import ZCalendarWidget from './widgets/z-calendar-widget.vue'
 import ZWeatherWidget from './widgets/z-weather-widget.vue'
+import ZNotesWidget from './widgets/z-notes-widget.vue'
+
+// Import modal system to register globally (vanilla JS compatible)
+import './utils/modalManager'
 
 // Crear el custom element
 const ZClockElement = defineCustomElement(ZClockWidget)
@@ -13,6 +17,7 @@ const ZTodoElement = defineCustomElement(ZTodoWidget)
 const ZMarkedElement = defineCustomElement(ZMarkedWidget)
 const ZCalendarElement = defineCustomElement(ZCalendarWidget)
 const ZWeatherElement = defineCustomElement(ZWeatherWidget)
+const ZNotesElement = defineCustomElement(ZNotesWidget)
 
 // Registrar custom element (evitar doble registro)
 if (!customElements.get('z-clock-widget')) {
@@ -39,5 +44,20 @@ if (!customElements.get('z-weather-widget')) {
   customElements.define('z-weather-widget', ZWeatherElement)
 }
 
-// Exportar el componente para uso tradicional Vue
-export { ZClockWidget, ZSearchWidget, ZTodoWidget, ZMarkedWidget, ZCalendarWidget, ZWeatherWidget }
+if (!customElements.get('z-notes-widget')) {
+  customElements.define('z-notes-widget', ZNotesElement)
+}
+
+// Exportar componentes
+export { ZClockWidget, ZSearchWidget, ZTodoWidget, ZMarkedWidget, ZCalendarWidget, ZWeatherWidget, ZNotesWidget }
+
+// Exportar sistema de modales (vanilla JS compatible)
+export { 
+  showConfirm, 
+  showAlert, 
+  showPrompt, 
+  showSuccess, 
+  showError, 
+  showWarning,
+  showDeleteConfirm
+} from './utils/modalManager'
