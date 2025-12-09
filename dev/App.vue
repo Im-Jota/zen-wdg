@@ -118,6 +118,7 @@ import ZSearchWidget from '../src/widgets/z-search-widget.vue'
 import ZTodoWidget from '../src/widgets/z-todo-widget.vue'
 import ZMarkedWidget from '../src/widgets/z-marked-widget.vue'
 import ZCalendarWidget from '../src/widgets/z-calendar-widget.vue'
+import ZWeatherWidget from '../src/widgets/z-weather-widget.vue'
 
 export default {
   name: 'WidgetGallery',
@@ -126,7 +127,8 @@ export default {
     ZSearchWidget,
     ZTodoWidget,
     ZMarkedWidget,
-    ZCalendarWidget
+    ZCalendarWidget,
+    ZWeatherWidget
   },
   data() {
     return {
@@ -178,6 +180,15 @@ export default {
           status: 'stable',
           description: 'Calendario con eventos, vistas múltiples y almacenamiento local',
           file: 'z-calendar-widget.vue'
+        },
+        {
+          name: 'z-weather-widget',
+          title: '🌤️ Clima',
+          component: 'ZWeatherWidget',
+          category: 'Información',
+          status: 'stable',
+          description: 'Widget de clima en tiempo real con geolocalización automática',
+          file: 'z-weather-widget.vue'
         }
       ]
     }
