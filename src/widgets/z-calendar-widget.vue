@@ -24,7 +24,7 @@
     <!-- Vista del calendario -->
     <div class="calendar-view">
       <!-- Vista de Día -->
-      <div v-if="currentView === 'day'" class="day-view">
+      <div v-show="currentView === 'day'" class="zcal-day-view">
         <div class="time-grid">
           <div v-for="hour in 24" :key="hour" class="hour-slot">
             <div class="hour-label">{{ formatHour(hour - 1) }}</div>
@@ -46,7 +46,7 @@
       </div>
 
       <!-- Vista de Semana -->
-      <div v-if="currentView === 'week'" class="week-view">
+      <div v-show="currentView === 'week'" class="zcal-week-view">
         <div class="week-header">
           <div class="week-time-label"></div>
           <div v-for="day in weekDays" :key="day.date" class="week-day-header">
@@ -73,7 +73,7 @@
       </div>
 
       <!-- Vista de Mes -->
-      <div v-if="currentView === 'month'" class="month-view">
+      <div v-show="currentView === 'month'" class="zcal-month-view">
         <div class="month-header">
           <div v-for="day in dayNames" :key="day" class="month-day-name">{{ day }}</div>
         </div>
@@ -429,13 +429,14 @@ export default {
   border-radius: 1rem;
   backdrop-filter: blur(10px) saturate(180%);
   -webkit-backdrop-filter: blur(10px) saturate(180%);
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.85);
   border: 1px solid rgba(255, 255, 255, 0.3);
   color: #202020;
+  isolation: isolate;
 }
 
 .calendar-container.dark {
-  background: rgba(20, 20, 20, 0.3);
+  background: rgba(20, 20, 20, 0.85);
   color: #dfdfdf;
 }
 
@@ -468,7 +469,7 @@ export default {
 }
 
 .view-btn.active {
-  background: rgba(6, 109, 90, 0.6);
+  background: #066D5A;
   color: white;
 }
 
@@ -537,8 +538,15 @@ export default {
 }
 
 /* Vista de Día */
-.day-view {
+.zcal-day-view {
   height: 100%;
+  display: none;
+}
+
+.zcal-day-view[style*="display: block"],
+.zcal-day-view:not([style*="display: none"]) {
+  display: flex;
+  flex-direction: column;
 }
 
 .time-grid {
@@ -570,10 +578,15 @@ export default {
 }
 
 /* Vista de Semana */
-.week-view {
+.zcal-week-view {
   height: 100%;
-  display: flex;
+  display: none;
   flex-direction: column;
+}
+
+.zcal-week-view[style*="display: block"],
+.zcal-week-view:not([style*="display: none"]) {
+  display: flex;
 }
 
 .week-header {
@@ -647,10 +660,15 @@ export default {
 }
 
 /* Vista de Mes */
-.month-view {
+.zcal-month-view {
   height: 100%;
-  display: flex;
+  display: none;
   flex-direction: column;
+}
+
+.zcal-month-view[style*="display: block"],
+.zcal-month-view:not([style*="display: none"]) {
+  display: flex;
 }
 
 .month-header {
@@ -779,13 +797,14 @@ export default {
 }
 
 .modal-content {
-  background: white;
+  background: #ffffff;
   border-radius: 1rem;
   width: 90%;
   max-width: 500px;
   max-height: 90vh;
   overflow-y: auto;
   box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+  isolation: isolate;
 }
 
 .dark .modal-content {
