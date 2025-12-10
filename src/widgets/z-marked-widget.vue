@@ -1,13 +1,29 @@
 <template>
   <div class="container-marked">
     <div class="tabs" :class="[theme == 'dark' ? 'dark' : 'light']">
-      <div v-for="tab in categories" :key="tab" class="container-tab" >
+      <div v-for="tab in userCategories" :key="tab" class="container-tab" >
         <button
           class="tab"
           :class="{ active: tab === activeTab }"
           @click="setActiveTab(tab)"
         >
           {{ tab }}
+        </button>
+        <button
+          class="delete-tab"
+          @click.stop="deleteCategory(tab)"
+          title="Eliminar categoría"
+        >
+          ×
+        </button>
+      </div>
+      <div class="container-tab">
+        <button
+          class="tab add-tab"
+          @click="addCategoryPrompt"
+          title="Añadir nueva categoría"
+        >
+          +
         </button>
       </div>
     </div>
@@ -83,6 +99,7 @@ export default {
   },
   data() {
     const STORAGE_KEY = 'bookmark_manager_state';
+    const CATEGORIES_KEY = 'bookmark_categories';
 
     const defaultBookmarks = {
       Personal: [
@@ -162,10 +179,18 @@ export default {
       ? JSON.parse(localStorage.getItem(STORAGE_KEY)) || defaultBookmarks
       : defaultBookmarks;
 
+    const storedCategories = this.useStorage
+      ? JSON.parse(localStorage.getItem(CATEGORIES_KEY))
+      : null;
+    
+    const userCategories = storedCategories || [...this.categories];
+
     return {
       STORAGE_KEY,
+      CATEGORIES_KEY,
       bookmarks,
-      activeTab: 'Personal',
+      userCategories,
+      activeTab: userCategories[0] || 'Personal',
       faviconAttempts: {}
     };
   },
@@ -178,6 +203,69 @@ export default {
     saveState() {
       if (this.useStorage) {
         localStorage.setItem(this.STORAGE_KEY, JSON.stringify(this.bookmarks));
+        localStorage.setItem(this.CATEGORIES_KEY, JSON.stringify(this.userCategories));
+      }
+    },
+    async addCategoryPrompt() {
+      const categoryName = await window.ZenModals.showPrompt({
+        title: 'Nueva Categoría',
+        message: 'Introduce el nombre de la nueva categoría:',
+        inputPlaceholder: 'Ej: Hobbies, Finanzas, etc.'
+      });
+      
+      if (!categoryName || !categoryName.trim()) return;
+      
+      const trimmedName = categoryName.trim();
+      
+      // Verificar si ya existe
+      if (this.userCategories.includes(trimmedName)) {
+        alert('Esta categoría ya existe');
+        return;
+      }
+      
+      // Añadir la nueva categoría
+      this.userCategories.push(trimmedName);
+      
+      // Inicializar con array vacío de bookmarks
+      if (!this.bookmarks[trimmedName]) {
+        this.bookmarks[trimmedName] = [];
+      }
+      
+      // Cambiar a la nueva categoría
+      this.activeTab = trimmedName;
+      
+      this.saveState();
+    },
+    async deleteCategory(category) {
+      // No permitir eliminar si es la única categoría que queda
+      if (this.userCategories.length <= 1) {
+        alert('No puedes eliminar la única categoría. Debe existir al menos una.');
+        return;
+      }
+      
+      const bookmarkCount = this.bookmarks[category]?.length || 0;
+      const message = bookmarkCount > 0
+        ? `¿Estás seguro de eliminar la categoría "${category}"? Se eliminarán ${bookmarkCount} marcador(es).`
+        : `¿Estás seguro de eliminar la categoría "${category}"?`;
+      
+      const confirmed = await window.ZenModals.showDeleteConfirm(category, message);
+      
+      if (confirmed) {
+        // Eliminar la categoría del array
+        const index = this.userCategories.indexOf(category);
+        if (index > -1) {
+          this.userCategories.splice(index, 1);
+        }
+        
+        // Eliminar los bookmarks de esa categoría
+        delete this.bookmarks[category];
+        
+        // Si era la categoría activa, cambiar a la primera disponible
+        if (this.activeTab === category) {
+          this.activeTab = this.userCategories[0];
+        }
+        
+        this.saveState();
       }
     },
     setActiveTab(tab) {
@@ -355,6 +443,53 @@ export default {
 
 .container-tab {
   position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.delete-tab {
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  border: none;
+  background-color: #dc2626;
+  color: white;
+  font-size: 14px;
+  font-weight: bold;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  line-height: 1;
+  opacity: 0;
+  transition: opacity 0.2s;
+  z-index: 10;
+}
+
+.container-tab:hover .delete-tab {
+  opacity: 1;
+}
+
+.delete-tab:hover {
+  background-color: #b91c1c;
+}
+
+.add-tab {
+  background: linear-gradient(135deg, #066D5A 0%, #0891b2 100%);
+  color: white;
+  font-size: 1.2rem;
+  font-weight: bold;
+  padding: 8px 1.2rem !important;
+  transition: all 0.3s ease;
+}
+
+.add-tab:hover {
+  transform: scale(1.05);
+  box-shadow: 0 4px 12px rgba(6, 109, 90, 0.4);
 }
 
 
