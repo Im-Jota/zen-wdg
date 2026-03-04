@@ -40,9 +40,7 @@ export default {
     }
   },
 
-  created() {
-    console.log(this.options)
-  },
+  created() {},
 
   computed: {
     selected() {
@@ -57,7 +55,6 @@ export default {
     selectItem(item) {
       this.$emit("update:modelValue", item);
       this.isOpen = false;
-      console.log(item)
     },
 
     selectOption(option) {

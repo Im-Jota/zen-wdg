@@ -1,4 +1,6 @@
 import { defineCustomElement } from 'vue'
+import './styles/zen-theme.css'
+import { getWidgetLocale, t, getAvailableLocales, locales } from './i18n/widget-locales'
 import ZClockWidget from './widgets/z-clock-widget.vue'
 import ZSearchWidget from './widgets/z-search-widget.vue'
 import ZTodoWidget from './widgets/z-todo-widget.vue'
@@ -7,8 +9,8 @@ import ZCalendarWidget from './widgets/z-calendar-widget.vue'
 import ZWeatherWidget from './widgets/z-weather-widget.vue'
 import ZNotesWidget from './widgets/z-notes-widget.vue'
 
-// Import modal system to register globally (vanilla JS compatible)
-import './utils/modalManager'
+// Import modal system to register globally (Vue-based)
+import './composables/useModal'
 
 // Crear el custom element
 const ZClockElement = defineCustomElement(ZClockWidget)
@@ -51,7 +53,7 @@ if (!customElements.get('z-notes-widget')) {
 // Exportar componentes
 export { ZClockWidget, ZSearchWidget, ZTodoWidget, ZMarkedWidget, ZCalendarWidget, ZWeatherWidget, ZNotesWidget }
 
-// Exportar sistema de modales (vanilla JS compatible)
+// Exportar sistema de modales (Vue-based, globally registered)
 export { 
   showConfirm, 
   showAlert, 
@@ -59,5 +61,9 @@ export {
   showSuccess, 
   showError, 
   showWarning,
-  showDeleteConfirm
-} from './utils/modalManager'
+  showDeleteConfirm,
+  useModal
+} from './composables/useModal'
+
+// Exportar sistema i18n
+export { getWidgetLocale, t, getAvailableLocales, locales } from './i18n/widget-locales'

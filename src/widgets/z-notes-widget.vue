@@ -1,15 +1,15 @@
 <template>
   <div class="notes-widget">
     <div class="notes-header">
-      <h2 class="notes-title">📝 Notas</h2>
+      <h2 class="notes-title">📝 {{ i18n.title }}</h2>
       <div class="header-actions">
-        <button @click="showCategoryManager = !showCategoryManager" class="icon-btn" title="Gestionar Categorías">
+        <button @click="showCategoryManager = !showCategoryManager" class="icon-btn" :title="i18n.manageCategories">
           🏷️
         </button>
-        <button @click="exportNotes" class="icon-btn" title="Exportar Notas">
+        <button @click="exportNotes" class="icon-btn" :title="i18n.exportNotes">
           💾
         </button>
-        <button @click="toggleNewNote" class="icon-btn add-btn" title="Nueva Nota">
+        <button @click="toggleNewNote" class="icon-btn add-btn" :title="i18n.newNote">
           ➕
         </button>
       </div>
@@ -20,7 +20,7 @@
       <div v-if="showCategoryManager" class="modal-overlay" @click="showCategoryManager = false">
         <div class="modal-content" @click.stop>
           <div class="modal-header">
-            <h3>🏷️ Gestionar Categorías</h3>
+            <h3>🏷️ {{ i18n.manageCategories }}</h3>
             <button @click="showCategoryManager = false" class="close-btn">✕</button>
           </div>
           <div class="modal-body">
@@ -28,7 +28,7 @@
               <input 
                 v-model="newCategoryName" 
                 @keypress.enter="addCategory"
-                placeholder="Nombre de categoría"
+                :placeholder="i18n.categoryPlaceholder"
                 class="category-input"
               />
               <input 
@@ -36,7 +36,7 @@
                 type="color"
                 class="color-picker"
               />
-              <button @click="addCategory" class="add-category-btn">Agregar</button>
+              <button @click="addCategory" class="add-category-btn">{{ i18n.addCategory }}</button>
             </div>
             <div class="categories-list">
               <div 
@@ -53,7 +53,7 @@
                   v-if="category.id !== 'default'"
                   @click="deleteCategory(category.id)" 
                   class="delete-category-btn"
-                  title="Eliminar"
+                  :title="i18n.deleteNote"
                 >
                   🗑️
                 </button>
@@ -69,19 +69,19 @@
       <div v-if="showNewNoteForm" class="new-note-form">
         <input 
           v-model="newNote.title"
-          placeholder="Título de la nota..."
+          :placeholder="i18n.noteTitlePlaceholder"
           class="note-title-input"
           ref="titleInput"
         />
         <textarea 
           v-model="newNote.content"
-          placeholder="Escribe tu nota aquí..."
+          :placeholder="i18n.noteContentPlaceholder"
           class="note-content-input"
           rows="4"
         ></textarea>
         <div class="note-form-actions">
           <select v-model="newNote.categoryId" class="category-select">
-            <option value="">Sin categoría</option>
+            <option value="">{{ i18n.noCategory }}</option>
             <option 
               v-for="category in categories.filter(c => c.id !== 'default')" 
               :key="category.id"
@@ -91,8 +91,8 @@
             </option>
           </select>
           <div class="form-buttons">
-            <button @click="cancelNewNote" class="cancel-btn">Cancelar</button>
-            <button @click="saveNote" class="save-btn">Guardar</button>
+            <button @click="cancelNewNote" class="cancel-btn">{{ i18n.cancel }}</button>
+            <button @click="saveNote" class="save-btn">{{ i18n.save }}</button>
           </div>
         </div>
       </div>
@@ -105,13 +105,13 @@
           @click="filterCategory = null"
           :class="['filter-btn', { active: filterCategory === null }]"
         >
-          📋 Todas
+          📋 {{ i18n.filterAll }}
         </button>
         <button 
           @click="filterCategory = 'pinned'"
           :class="['filter-btn', { active: filterCategory === 'pinned' }]"
         >
-          📌 Fijadas
+          📌 {{ i18n.filterPinned }}
         </button>
         <button 
           v-for="category in categories.filter(c => c.id !== 'default')" 
@@ -125,9 +125,9 @@
       </div>
       <div class="sort-controls">
         <select v-model="sortBy" class="sort-select">
-          <option value="date">📅 Fecha</option>
-          <option value="title">🔤 Título</option>
-          <option value="category">🏷️ Categoría</option>
+          <option value="date">📅 {{ i18n.sortDate }}</option>
+          <option value="title">🔤 {{ i18n.sortTitle }}</option>
+          <option value="category">🏷️ {{ i18n.sortCategory }}</option>
         </select>
       </div>
     </div>
@@ -136,9 +136,9 @@
     <div class="notes-list">
       <div v-if="filteredNotes.length === 0" class="empty-state">
         <div class="empty-icon">📭</div>
-        <p>No hay notas</p>
+        <p>{{ i18n.emptyNotes }}</p>
         <button @click="toggleNewNote" class="create-first-note-btn">
-          Crear primera nota
+          {{ i18n.createFirst }}
         </button>
       </div>
 
@@ -153,16 +153,16 @@
             <button 
               @click="togglePin(note.id)" 
               :class="['pin-btn', { pinned: note.isPinned }]"
-              title="Fijar/Desfijar"
+              :title="i18n.pinUnpin"
             >
               {{ note.isPinned ? '📌' : '📍' }}
             </button>
-            <button @click="deleteNote(note.id)" class="delete-btn" title="Eliminar">
+            <button @click="deleteNote(note.id)" class="delete-btn" :title="i18n.deleteNote">
               🗑️
             </button>
           </div>
           
-          <h3 class="note-title">{{ note.title || 'Sin título' }}</h3>
+          <h3 class="note-title">{{ note.title || i18n.noTitle }}</h3>
           <p class="note-content">{{ note.content }}</p>
           
           <div class="note-footer">
@@ -184,15 +184,23 @@
 
     <!-- Stats Footer -->
     <div class="notes-stats">
-      <span>Total: {{ notes.length }} notas</span>
-      <span v-if="pinnedNotesCount > 0">📌 {{ pinnedNotesCount }} fijadas</span>
+      <span>{{ i18n.totalNotes.replace('{count}', notes.length) }}</span>
+      <span v-if="pinnedNotesCount > 0">📌 {{ i18n.pinnedCount.replace('{count}', pinnedNotesCount) }}</span>
     </div>
   </div>
 </template>
 
 <script>
+import { getWidgetLocale } from '../i18n/widget-locales'
+
 export default {
   name: 'ZNotesWidget',
+  props: {
+    locale: {
+      type: String,
+      default: 'es'
+    }
+  },
   data() {
     return {
       notes: [],
@@ -215,6 +223,9 @@ export default {
     }
   },
   computed: {
+    i18n() {
+      return getWidgetLocale('notes', this.locale);
+    },
     filteredNotes() {
       let filtered = [...this.notes]
 
@@ -326,7 +337,7 @@ export default {
     },
     getCategoryName(categoryId) {
       const category = this.categories.find(cat => cat.id === categoryId)
-      return category ? category.name : 'Sin categoría'
+      return category ? category.name : this.i18n.noCategory
     },
     getCategoryColor(categoryId) {
       const category = this.categories.find(cat => cat.id === categoryId)
@@ -348,15 +359,16 @@ export default {
         const hours = Math.floor(diff / (1000 * 60 * 60))
         if (hours === 0) {
           const minutes = Math.floor(diff / (1000 * 60))
-          return minutes === 0 ? 'Ahora' : `Hace ${minutes}m`
+          return minutes === 0 ? (this.locale === 'es' ? 'Ahora' : 'Now') : `${minutes}m`
         }
-        return `Hace ${hours}h`
+        return `${hours}h`
       } else if (days === 1) {
-        return 'Ayer'
+        return this.locale === 'es' ? 'Ayer' : this.locale === 'en' ? 'Yesterday' : this.locale === 'fr' ? 'Hier' : this.locale === 'de' ? 'Gestern' : this.locale === 'pt' ? 'Ontem' : this.locale === 'it' ? 'Ieri' : '1d'
       } else if (days < 7) {
-        return `Hace ${days} días`
+        return `${days}d`
       } else {
-        return date.toLocaleDateString('es-ES', { 
+        const localeMap = { es: 'es-ES', en: 'en-US', fr: 'fr-FR', de: 'de-DE', pt: 'pt-BR', it: 'it-IT', ja: 'ja-JP', zh: 'zh-CN', ko: 'ko-KR' };
+        return date.toLocaleDateString(localeMap[this.locale] || 'es-ES', { 
           day: 'numeric', 
           month: 'short',
           year: date.getFullYear() !== now.getFullYear() ? 'numeric' : undefined
@@ -365,7 +377,7 @@ export default {
     },
     exportNotes() {
       if (this.notes.length === 0) {
-        alert('No hay notas para exportar')
+        window.ZenModals.showWarning({ title: this.i18n.exportTitle, message: this.i18n.exportEmpty })
         return
       }
 
@@ -388,7 +400,7 @@ export default {
         exportText += '─'.repeat(60) + '\n\n'
 
         notesByCategory[categoryName].forEach(note => {
-          exportText += `### ${note.title || 'Sin título'}`
+          exportText += `### ${note.title || this.i18n.noTitle}`
           if (note.isPinned) exportText += ' 📌'
           exportText += '\n'
           exportText += `Fecha: ${new Date(note.createdAt).toLocaleString('es-ES')}\n\n`
@@ -412,7 +424,7 @@ export default {
       document.body.removeChild(link)
       URL.revokeObjectURL(url)
 
-      alert('✅ Notas exportadas exitosamente')
+      window.ZenModals.showSuccess({ title: this.i18n.exportCompleteTitle, message: this.i18n.exportSuccess })
     },
     saveToStorage() {
       try {
@@ -445,7 +457,7 @@ export default {
           const loaded = JSON.parse(data)
           // Ensure default category exists
           if (!loaded.find(c => c.id === 'default')) {
-            loaded.unshift({ id: 'default', name: 'Sin categoría', color: '#6b7280' })
+            loaded.unshift({ id: 'default', name: this.i18n.noCategory, color: '#6b7280' })
           }
           this.categories = loaded
         }
@@ -465,12 +477,12 @@ export default {
 .notes-widget {
   width: 100%;
   max-width: 900px;
-  background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
-  border-radius: 20px;
+  background: var(--zen-bg);
+  border-radius: var(--zen-radius-lg);
   padding: 25px;
-  color: #e2e8f0;
+  color: var(--zen-text);
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 20px 60px var(--zen-shadow);
 }
 
 /* Header */
@@ -480,7 +492,7 @@ export default {
   align-items: center;
   margin-bottom: 20px;
   padding-bottom: 15px;
-  border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+  border-bottom: 2px solid var(--zen-border);
 }
 
 .notes-title {
@@ -541,12 +553,12 @@ export default {
 }
 
 .modal-content {
-  background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
-  border-radius: 20px;
+  background: var(--zen-bg-secondary);
+  border-radius: var(--zen-radius-lg);
   padding: 30px;
   max-width: 500px;
   width: 100%;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 20px 60px var(--zen-shadow);
 }
 
 .modal-header {
@@ -558,7 +570,7 @@ export default {
 
 .modal-header h3 {
   margin: 0;
-  color: #e2e8f0;
+  color: var(--zen-text);
   font-size: 1.5rem;
 }
 
@@ -595,17 +607,17 @@ export default {
 .category-input {
   flex: 1;
   padding: 12px;
-  background: rgba(255, 255, 255, 0.05);
-  border: 2px solid rgba(255, 255, 255, 0.1);
+  background: var(--zen-hover);
+  border: 2px solid var(--zen-border);
   border-radius: 10px;
-  color: #e2e8f0;
+  color: var(--zen-text);
   font-size: 0.95rem;
 }
 
 .category-input:focus {
   outline: none;
-  border-color: #3b82f6;
-  background: rgba(255, 255, 255, 0.08);
+  border-color: var(--zen-accent);
+  background: var(--zen-active);
 }
 
 .color-picker {
@@ -645,13 +657,13 @@ export default {
   align-items: center;
   gap: 12px;
   padding: 12px;
-  background: rgba(255, 255, 255, 0.05);
+  background: var(--zen-hover);
   border-radius: 10px;
   transition: all 0.3s ease;
 }
 
 .category-item:hover {
-  background: rgba(255, 255, 255, 0.08);
+  background: var(--zen-active);
 }
 
 .category-color-preview {
@@ -663,7 +675,7 @@ export default {
 
 .category-name {
   flex: 1;
-  color: #e2e8f0;
+  color: var(--zen-text);
   font-weight: 500;
 }
 
@@ -685,7 +697,7 @@ export default {
 
 /* New Note Form */
 .new-note-form {
-  background: rgba(255, 255, 255, 0.05);
+  background: var(--zen-hover);
   border: 2px solid rgba(59, 130, 246, 0.3);
   border-radius: 15px;
   padding: 20px;
@@ -696,10 +708,10 @@ export default {
 .note-content-input {
   width: 100%;
   padding: 12px;
-  background: rgba(255, 255, 255, 0.05);
-  border: 2px solid rgba(255, 255, 255, 0.1);
+  background: var(--zen-hover);
+  border: 2px solid var(--zen-border);
   border-radius: 10px;
-  color: #e2e8f0;
+  color: var(--zen-text);
   font-size: 0.95rem;
   font-family: inherit;
   margin-bottom: 12px;
@@ -713,8 +725,8 @@ export default {
 .note-title-input:focus,
 .note-content-input:focus {
   outline: none;
-  border-color: #3b82f6;
-  background: rgba(255, 255, 255, 0.08);
+  border-color: var(--zen-accent);
+  background: var(--zen-active);
 }
 
 .note-content-input {
@@ -731,17 +743,17 @@ export default {
 
 .category-select {
   padding: 10px 15px;
-  background: rgba(255, 255, 255, 0.05);
-  border: 2px solid rgba(255, 255, 255, 0.1);
+  background: var(--zen-hover);
+  border: 2px solid var(--zen-border);
   border-radius: 10px;
-  color: #e2e8f0;
+  color: var(--zen-text);
   cursor: pointer;
   font-size: 0.9rem;
 }
 
 .category-select:focus {
   outline: none;
-  border-color: #3b82f6;
+  border-color: var(--zen-accent);
 }
 
 .form-buttons {
@@ -796,10 +808,10 @@ export default {
 
 .filter-btn {
   padding: 8px 16px;
-  background: rgba(255, 255, 255, 0.05);
-  border: 2px solid rgba(255, 255, 255, 0.1);
+  background: var(--zen-hover);
+  border: 2px solid var(--zen-border);
   border-radius: 20px;
-  color: #94a3b8;
+  color: var(--zen-text-secondary);
   cursor: pointer;
   font-size: 0.85rem;
   font-weight: 500;
@@ -807,8 +819,8 @@ export default {
 }
 
 .filter-btn:hover {
-  background: rgba(255, 255, 255, 0.08);
-  color: #e2e8f0;
+  background: var(--zen-active);
+  color: var(--zen-text);
 }
 
 .filter-btn.active {
@@ -824,17 +836,17 @@ export default {
 
 .sort-select {
   padding: 8px 12px;
-  background: rgba(255, 255, 255, 0.05);
-  border: 2px solid rgba(255, 255, 255, 0.1);
+  background: var(--zen-hover);
+  border: 2px solid var(--zen-border);
   border-radius: 10px;
-  color: #e2e8f0;
+  color: var(--zen-text);
   cursor: pointer;
   font-size: 0.85rem;
 }
 
 .sort-select:focus {
   outline: none;
-  border-color: #3b82f6;
+  border-color: var(--zen-accent);
 }
 
 /* Notes List */
@@ -883,7 +895,7 @@ export default {
 }
 
 .note-card {
-  background: rgba(255, 255, 255, 0.05);
+  background: var(--zen-hover);
   backdrop-filter: blur(10px);
   border-left: 4px solid #6b7280;
   border-radius: 12px;
@@ -895,7 +907,7 @@ export default {
 }
 
 .note-card:hover {
-  background: rgba(255, 255, 255, 0.08);
+  background: var(--zen-active);
   transform: translateY(-3px);
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
 }
@@ -940,7 +952,7 @@ export default {
 .note-title {
   margin: 0;
   font-size: 1.1rem;
-  color: #f1f5f9;
+  color: var(--zen-text);
   font-weight: 600;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -949,7 +961,7 @@ export default {
 
 .note-content {
   margin: 0;
-  color: #cbd5e1;
+  color: var(--zen-text-secondary);
   font-size: 0.9rem;
   line-height: 1.6;
   flex: 1;
@@ -966,7 +978,7 @@ export default {
   align-items: center;
   gap: 10px;
   padding-top: 10px;
-  border-top: 1px solid rgba(255, 255, 255, 0.05);
+  border-top: 1px solid var(--zen-border);
 }
 
 .note-category {
@@ -979,7 +991,7 @@ export default {
 }
 
 .note-date {
-  color: #64748b;
+  color: var(--zen-text-dim);
   font-size: 0.75rem;
 }
 
@@ -988,9 +1000,9 @@ export default {
   display: flex;
   justify-content: space-between;
   padding: 15px;
-  background: rgba(255, 255, 255, 0.05);
+  background: var(--zen-hover);
   border-radius: 10px;
-  color: #94a3b8;
+  color: var(--zen-text-secondary);
   font-size: 0.9rem;
   font-weight: 500;
 }

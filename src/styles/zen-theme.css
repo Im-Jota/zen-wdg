@@ -1,0 +1,50 @@
+/**
+ * Zen Widget Theme Variables
+ * 
+ * These CSS custom properties define the theming API for all zen-wdg widgets.
+ * Override these variables in the host application to customize widget appearance.
+ * 
+ * Integration with midori-tab:
+ *   --zen-bg maps to --color-bg
+ *   --zen-text maps to --color-text
+ *   --zen-accent maps to --theme-accent
+ */
+
+:root,
+:host {
+  /* Primary backgrounds */
+  --zen-bg: var(--color-bg, rgba(20, 20, 20, 0.4));
+  --zen-bg-secondary: var(--color-bg-secondary, rgba(10, 10, 10, 0.6));
+  --zen-bg-tertiary: var(--color-bg-tertiary, rgba(42, 42, 42, 1));
+  
+  /* Text colors */
+  --zen-text: var(--color-text, #ffffff);
+  --zen-text-secondary: var(--color-text-secondary, #cccccc);
+  --zen-text-muted: var(--color-text-muted, #999999);
+  --zen-text-dim: var(--color-text-dim, #666666);
+  
+  /* Accent / brand */
+  --zen-accent: var(--theme-accent, #007bff);
+  --zen-accent-hover: var(--theme-accent-hover, #0056b3);
+  
+  /* Borders & shadows */
+  --zen-border: var(--color-border, rgba(255, 255, 255, 0.2));
+  --zen-border-light: var(--color-border-light, rgba(255, 255, 255, 0.3));
+  --zen-shadow: var(--color-shadow, rgba(0, 0, 0, 0.3));
+  
+  /* Interactive states */
+  --zen-hover: var(--color-hover, rgba(255, 255, 255, 0.1));
+  --zen-active: var(--color-active, rgba(255, 255, 255, 0.2));
+  
+  /* Status colors */
+  --zen-success: var(--color-success, #10b981);
+  --zen-error: var(--color-error, #ef4444);
+  --zen-warning: var(--color-warning, #f59e0b);
+  --zen-info: var(--color-info, #3b82f6);
+  
+  /* Blur & effects */
+  --zen-blur: var(--effect-blur, 0.2rem);
+  --zen-radius: var(--effect-radius, 15px);
+  --zen-radius-sm: var(--effect-radius-sm, 8px);
+  --zen-radius-lg: var(--effect-radius-lg, 16px);
+}

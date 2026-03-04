@@ -14,8 +14,16 @@
 </template>
 
 <script>
+import { getWidgetLocale } from '../i18n/widget-locales'
+
 export default {
   name: 'ZClockWidget',
+  props: {
+    locale: {
+      type: String,
+      default: 'es'
+    }
+  },
   data() {
     return {
       hours: '00',
@@ -25,11 +33,18 @@ export default {
       day: '',
       month: '',
       year: '',
+      _intervalId: null,
     };
   },
   mounted() {
     this.updateClock();
-    setInterval(this.updateClock, 1000); // Actualizar la hora cada segundo
+    this._intervalId = setInterval(this.updateClock, 1000);
+  },
+  beforeUnmount() {
+    if (this._intervalId) {
+      clearInterval(this._intervalId);
+      this._intervalId = null;
+    }
   },
   methods: {
     updateClock() {
@@ -47,15 +62,12 @@ export default {
       this.year = now.getFullYear();
     },
     getDayOfWeek(dayIndex) {
-      const days = ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'];
-      return days[dayIndex];
+      const i = getWidgetLocale('clock', this.locale);
+      return i.days[dayIndex];
     },
     getMonthName(monthIndex) {
-      const months = [
-        'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 
-        'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'
-      ];
-      return months[monthIndex];
+      const i = getWidgetLocale('clock', this.locale);
+      return i.months[monthIndex];
     },
   },
 };
@@ -73,10 +85,10 @@ export default {
 .clock {
   text-align: center;
   font-family: 'Arial', sans-serif;
-  color: #333;
-  background-color: rgba(20, 20, 20, .4);
-  backdrop-filter: blur(.2rem);
-  border-radius: 15px;
+  color: var(--zen-text);
+  background-color: var(--zen-bg);
+  backdrop-filter: blur(var(--zen-blur));
+  border-radius: var(--zen-radius);
   padding: 20px;
   width: 100%;
 }
@@ -84,14 +96,14 @@ export default {
 .time {
   font-size: 4em;
   font-weight: bold;
-  color: #fff;
+  color: var(--zen-text);
   display: flex;
   justify-content: center;
 }
 
 .date {
   font-size: 1.2em;
-  color: #fff;
+  color: var(--zen-text);
   margin-top: 10px;
 }
 
