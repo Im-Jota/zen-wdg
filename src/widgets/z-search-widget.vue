@@ -66,7 +66,6 @@ export default {
 
   methods: {
     search() {
-      console.log(this.engine.search)
       const url = `${this.engine.search}${this.text}`
       if (this.searchTarget == 'New Tab') {
         chrome.tabs.create({ url: url });
@@ -84,8 +83,8 @@ export default {
   width: 100%;
   backdrop-filter: blur(10px) saturate(180%);
   -webkit-backdrop-filter: blur(10px) saturate(180%);
-  background-color: rgba(20, 20, 20, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.3);
+  background-color: var(--zen-bg);
+  border: 1px solid var(--zen-border-light);
   color: white;
   box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.2);
   padding: .4rem;
@@ -94,7 +93,7 @@ export default {
 
 .search {
   width: 100%;
-  background-color: rgba(10, 10, 10, .6);
+  background-color: var(--zen-bg-secondary);
   display: flex;
   align-items: center;
   padding: .3rem .8rem;

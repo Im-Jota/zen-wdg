@@ -12,7 +12,7 @@
         <button
           class="delete-tab"
           @click.stop="deleteCategory(tab)"
-          title="Eliminar categoría"
+  :title="i18n.deleteCategory"
         >
           ×
         </button>
@@ -21,7 +21,7 @@
         <button
           class="tab add-tab"
           @click="addCategoryPrompt"
-          title="Añadir nueva categoría"
+          :title="i18n.addCategory"
         >
           +
         </button>
@@ -64,7 +64,7 @@
         <a href="#" class="card-link" @click.prevent="addBookmarkPrompt" :class="theme == 'dark' ? 'dark' : 'light'">
           <div class="column">
             <span class="add">+</span>
-            Add
+            {{ i18n.add }}
           </div>
         </a>
       </div>
@@ -73,6 +73,8 @@
 </template>
 
 <script>
+import { getWidgetLocale } from '../i18n/widget-locales'
+
 export default {
   name: 'ZMarkedWidget',
   props: {
@@ -95,6 +97,10 @@ export default {
     useStorage: {
       type: Boolean,
       default: false
+    },
+    locale: {
+      type: String,
+      default: 'es'
     }
   },
   data() {
@@ -195,6 +201,9 @@ export default {
     };
   },
   computed: {
+    i18n() {
+      return getWidgetLocale('marked', this.locale);
+    },
     currentBookmarks() {
       return this.bookmarks[this.activeTab] || [];
     }
@@ -208,9 +217,9 @@ export default {
     },
     async addCategoryPrompt() {
       const categoryName = await window.ZenModals.showPrompt({
-        title: 'Nueva Categoría',
-        message: 'Introduce el nombre de la nueva categoría:',
-        inputPlaceholder: 'Ej: Hobbies, Finanzas, etc.'
+        title: this.i18n.newCategory,
+        message: this.i18n.newCategoryPrompt,
+        inputPlaceholder: this.i18n.newCategoryPlaceholder
       });
       
       if (!categoryName || !categoryName.trim()) return;
@@ -219,7 +228,7 @@ export default {
       
       // Verificar si ya existe
       if (this.userCategories.includes(trimmedName)) {
-        alert('Esta categoría ya existe');
+        window.ZenModals.showWarning({ title: this.i18n.duplicateCategory, message: this.i18n.duplicateCategoryMsg });
         return;
       }
       
@@ -239,14 +248,14 @@ export default {
     async deleteCategory(category) {
       // No permitir eliminar si es la única categoría que queda
       if (this.userCategories.length <= 1) {
-        alert('No puedes eliminar la única categoría. Debe existir al menos una.');
+        window.ZenModals.showWarning({ title: this.i18n.cannotDelete, message: this.i18n.cannotDeleteMsg });
         return;
       }
       
       const bookmarkCount = this.bookmarks[category]?.length || 0;
       const message = bookmarkCount > 0
-        ? `¿Estás seguro de eliminar la categoría "${category}"? Se eliminarán ${bookmarkCount} marcador(es).`
-        : `¿Estás seguro de eliminar la categoría "${category}"?`;
+        ? `${this.i18n.deleteCategoryConfirm} "${category}"? ${this.i18n.deleteCategoryConfirmWithCount.replace('{count}', bookmarkCount)}`
+        : `${this.i18n.deleteCategoryConfirm} "${category}"?`;
       
       const confirmed = await window.ZenModals.showDeleteConfirm(category, message);
       
@@ -290,20 +299,20 @@ export default {
       const item = this.bookmarks[this.activeTab][index];
       
       const newTitle = await window.ZenModals.showPrompt({
-        title: 'Editar Marcador',
-        message: 'Introduce el nuevo título:',
+        title: this.i18n.editBookmark,
+        message: this.i18n.editTitle,
         inputDefaultValue: item.title,
-        inputPlaceholder: 'Título del marcador'
+        inputPlaceholder: this.i18n.editTitlePlaceholder
       });
       
       if (!newTitle) return;
       
       const newUrl = await window.ZenModals.showPrompt({
-        title: 'Editar URL',
-        message: 'Introduce la nueva URL:',
+        title: this.i18n.editUrl,
+        message: this.i18n.editUrlPrompt,
         inputDefaultValue: item.url,
         inputType: 'url',
-        inputPlaceholder: 'https://ejemplo.com'
+        inputPlaceholder: this.i18n.bookmarkUrlPlaceholder
       });
       
       if (!newUrl) return;
@@ -320,18 +329,18 @@ export default {
     },
     async addBookmarkPrompt() {
       const title = await window.ZenModals.showPrompt({
-        title: 'Nuevo Marcador',
-        message: 'Introduce el nombre del marcador:',
-        inputPlaceholder: 'Nombre del sitio'
+        title: this.i18n.newBookmark,
+        message: this.i18n.bookmarkName,
+        inputPlaceholder: this.i18n.bookmarkNamePlaceholder
       });
       
       if (!title) return;
       
       const url = await window.ZenModals.showPrompt({
-        title: 'URL del Marcador',
-        message: 'Introduce la URL:',
+        title: this.i18n.bookmarkUrl,
+        message: this.i18n.bookmarkUrlPrompt,
         inputType: 'url',
-        inputPlaceholder: 'https://ejemplo.com'
+        inputPlaceholder: this.i18n.bookmarkUrlPlaceholder
       });
       
       if (!url) return;
@@ -428,17 +437,17 @@ export default {
   flex-wrap: wrap;
   backdrop-filter: blur(10px) saturate(180%);
   -webkit-backdrop-filter: blur(10px) saturate(180%);
-  background: rgba(255, 255, 255, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  color: #444444;
+  background: var(--zen-hover);
+  border: 1px solid var(--zen-border-light);
+  color: var(--zen-text-secondary);
   padding: 0.2rem;
   border-radius: 0.6rem;
   align-self: start;
 }
 
 .tabs.dark {
-  background: rgba(20, 20, 20, 0.3);
-  color: #dfdfdf;
+  background: var(--zen-bg);
+  color: var(--zen-text);
 }
 
 .container-tab {
@@ -455,7 +464,7 @@ export default {
   height: 18px;
   border-radius: 50%;
   border: none;
-  background-color: #dc2626;
+  background-color: var(--zen-error);
   color: white;
   font-size: 14px;
   font-weight: bold;
@@ -489,9 +498,8 @@ export default {
 
 .add-tab:hover {
   transform: scale(1.05);
-  box-shadow: 0 4px 12px rgba(6, 109, 90, 0.4);
+  box-shadow: 0 4px 12px var(--zen-shadow);
 }
-
 
 .tab {
   padding: 8px 2rem;
@@ -499,15 +507,15 @@ export default {
   cursor: pointer;
   font-weight: 600;
   background-color: transparent;
-  color: unset;
+  color: var(--zen-text);
 }
 
 .tab.active {
   background-color: rgba(6, 109, 90, 0.3);
   backdrop-filter: blur(10px) saturate(180%);
   -webkit-backdrop-filter: blur(10px) saturate(180%);
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  color: white;
+  border: 1px solid var(--zen-border-light);
+  color: var(--zen-text);
   border-radius: 0.5rem;
 }
 
@@ -534,15 +542,15 @@ export default {
   height: 115px;
   padding: 16px;
   border-radius: 1rem;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
-  background-color: rgba(225, 225, 225, 0.1);
+  box-shadow: 0 2px 4px var(--zen-shadow);
+  background-color: var(--zen-hover);
   backdrop-filter: blur(10px) saturate(180%);
   -webkit-backdrop-filter: blur(10px) saturate(180%);
-  border: 1px solid rgba(255, 255, 255, 0.3);
+  border: 1px solid var(--zen-border-light);
   text-align: center;
   cursor: pointer;
   text-decoration: none;
-  color: #202020;
+  color: var(--zen-text);
   display: flex;
   justify-content: center;
   flex-direction: column;
@@ -551,23 +559,23 @@ export default {
 .card-link:hover {
   backdrop-filter: blur(10px) saturate(180%);
   -webkit-backdrop-filter: blur(10px) saturate(180%);
-  background-color: rgba(220, 220, 220, .6);
-  border: 1px solid rgba(255, 255, 255, 0.3);
+  background-color: var(--zen-active);
+  border: 1px solid var(--zen-border-light);
 }
 
 .card-link.dark {
-  background-color: rgba(20, 20, 20, 0.1);
+  background-color: var(--zen-bg);
   backdrop-filter: blur(10px) saturate(180%);
   -webkit-backdrop-filter: blur(10px) saturate(180%);
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  color: #fff;
+  border: 1px solid var(--zen-border-light);
+  color: var(--zen-text);
 }
 
 .card-link.dark:hover {
   backdrop-filter: blur(10px) saturate(180%);
   -webkit-backdrop-filter: blur(10px) saturate(180%);
-  background-color: rgba(10, 10, 10, .6);
-  border: 1px solid rgba(255, 255, 255, 0.3);
+  background-color: var(--zen-bg-secondary);
+  border: 1px solid var(--zen-border-light);
 }
 
 .option-app {
