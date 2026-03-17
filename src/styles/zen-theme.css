@@ -1,5 +1,5 @@
 /**
- * Zen Widget Theme Variables
+ * Zen Widget Theme Variables — Midnight Sage
  * 
  * These CSS custom properties define the theming API for all zen-wdg widgets.
  * Override these variables in the host application to customize widget appearance.
@@ -13,38 +13,42 @@
 :root,
 :host {
   /* Primary backgrounds */
-  --zen-bg: var(--color-bg, rgba(20, 20, 20, 0.4));
-  --zen-bg-secondary: var(--color-bg-secondary, rgba(10, 10, 10, 0.6));
-  --zen-bg-tertiary: var(--color-bg-tertiary, rgba(42, 42, 42, 1));
+  --zen-bg: var(--color-bg, #080D14);
+  --zen-bg-secondary: var(--color-bg-secondary, #0F1520);
+  --zen-bg-tertiary: var(--color-bg-elevated, #1E2D3D);
+  
+  /* Surfaces */
+  --zen-surface-raised: var(--surface-raised, #0F1520);
+  --zen-surface-overlay: var(--surface-overlay, #1E2D3D);
+  --zen-surface-sunken: var(--surface-sunken, #060A10);
   
   /* Text colors */
-  --zen-text: var(--color-text, #ffffff);
-  --zen-text-secondary: var(--color-text-secondary, #cccccc);
-  --zen-text-muted: var(--color-text-muted, #999999);
-  --zen-text-dim: var(--color-text-dim, #666666);
+  --zen-text: var(--color-text, #C4F0E0);
+  --zen-text-secondary: var(--color-text-secondary, #7EC4A8);
+  --zen-text-muted: var(--color-text-muted, #5A9A82);
+  --zen-text-dim: var(--color-text-dim, #3A5B4D);
   
   /* Accent / brand */
-  --zen-accent: var(--theme-accent, #007bff);
-  --zen-accent-hover: var(--theme-accent-hover, #0056b3);
+  --zen-accent: var(--theme-accent, #04A469);
+  --zen-accent-hover: var(--color-primary-hover, #4de0b2);
   
   /* Borders & shadows */
-  --zen-border: var(--color-border, rgba(255, 255, 255, 0.2));
-  --zen-border-light: var(--color-border-light, rgba(255, 255, 255, 0.3));
-  --zen-shadow: var(--color-shadow, rgba(0, 0, 0, 0.3));
+  --zen-border: var(--color-border, rgba(126, 196, 168, 0.1));
+  --zen-border-light: var(--color-border-hover, rgba(126, 196, 168, 0.2));
+  --zen-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   
   /* Interactive states */
-  --zen-hover: var(--color-hover, rgba(255, 255, 255, 0.1));
-  --zen-active: var(--color-active, rgba(255, 255, 255, 0.2));
+  --zen-hover: var(--color-accent-bg, rgba(4, 164, 105, 0.08));
+  --zen-active: var(--color-accent-bg, rgba(4, 164, 105, 0.15));
   
   /* Status colors */
-  --zen-success: var(--color-success, #10b981);
-  --zen-error: var(--color-error, #ef4444);
-  --zen-warning: var(--color-warning, #f59e0b);
-  --zen-info: var(--color-info, #3b82f6);
+  --zen-success: var(--accent-success, #04A469);
+  --zen-error: var(--accent-danger, #e17055);
+  --zen-warning: var(--accent-warning, #fdcb6e);
+  --zen-info: var(--accent-blue, #0984e3);
   
-  /* Blur & effects */
-  --zen-blur: var(--effect-blur, 0.2rem);
-  --zen-radius: var(--effect-radius, 15px);
-  --zen-radius-sm: var(--effect-radius-sm, 8px);
-  --zen-radius-lg: var(--effect-radius-lg, 16px);
+  /* Radius */
+  --zen-radius: var(--radius-md, 10px);
+  --zen-radius-sm: var(--radius-sm, 6px);
+  --zen-radius-lg: var(--radius-lg, 16px);
 }

@@ -214,9 +214,7 @@ export default {
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(0, 0, 0, 0.6);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
+  background: rgba(0, 0, 0, 0.5);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -226,18 +224,17 @@ export default {
 
 /* Container */
 .modal-container {
-  background: rgba(255, 255, 255, 0.95);
-  backdrop-filter: blur(20px) saturate(180%);
-  -webkit-backdrop-filter: blur(20px) saturate(180%);
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  border-radius: 20px;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  background: var(--zen-surface-overlay, #1E2D3D);
+  border: 1px solid var(--zen-border, rgba(126, 196, 168, 0.1));
+  border-radius: var(--zen-radius-lg, 16px);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
   max-width: 90vw;
   max-height: 90vh;
   overflow: hidden;
   display: flex;
   flex-direction: column;
   animation: modalSlideIn 0.3s ease-out;
+  color: var(--zen-text, #C4F0E0);
 }
 
 /* Sizes */
@@ -253,27 +250,26 @@ export default {
   width: 600px;
 }
 
-/* Type variants - Dark background */
+/* Type variants */
 .modal-container.confirm,
 .modal-container.prompt {
-  background: rgba(30, 30, 35, 0.95);
-  color: #fff;
+  background: var(--zen-bg-secondary, #0F1520);
 }
 
 .modal-container.success {
-  background: rgba(16, 185, 129, 0.95);
-  color: #fff;
+  background: var(--zen-bg-secondary, #0F1520);
+  border-color: var(--zen-success, #04A469);
 }
 
 .modal-container.error,
 .modal-container.warning {
-  background: rgba(239, 68, 68, 0.95);
-  color: #fff;
+  background: var(--zen-bg-secondary, #0F1520);
+  border-color: var(--zen-error, #e17055);
 }
 
 .modal-container.info {
-  background: rgba(59, 130, 246, 0.95);
-  color: #fff;
+  background: var(--zen-bg-secondary, #0F1520);
+  border-color: var(--zen-info, #0984e3);
 }
 
 /* Header */
@@ -282,7 +278,7 @@ export default {
   align-items: center;
   justify-content: space-between;
   padding: 24px 24px 16px 24px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  border-bottom: 1px solid var(--zen-border, rgba(126, 196, 168, 0.1));
 }
 
 .modal-title {
@@ -307,7 +303,7 @@ export default {
 }
 
 .modal-close:hover {
-  background: rgba(255, 255, 255, 0.1);
+  background: var(--zen-hover, rgba(4, 164, 105, 0.08));
   opacity: 1;
 }
 
@@ -348,22 +344,22 @@ export default {
 .modal-input {
   width: 100%;
   padding: 12px 16px;
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  border-radius: 10px;
-  background: rgba(255, 255, 255, 0.1);
-  color: #fff;
+  border: 1px solid var(--zen-border-light, rgba(126, 196, 168, 0.2));
+  border-radius: var(--zen-radius-sm, 6px);
+  background: var(--zen-bg, #080D14);
+  color: var(--zen-text, #C4F0E0);
   font-size: 1rem;
   transition: all 0.2s ease;
 }
 
 .modal-input:focus {
   outline: none;
-  border-color: rgba(255, 255, 255, 0.4);
-  background: rgba(255, 255, 255, 0.15);
+  border-color: var(--zen-accent, #04A469);
+  background: var(--zen-surface-sunken, #060A10);
 }
 
 .modal-input::placeholder {
-  color: rgba(255, 255, 255, 0.5);
+  color: var(--zen-text-muted, #5A9A82);
 }
 
 .modal-custom-content {
@@ -381,53 +377,52 @@ export default {
 .modal-btn {
   padding: 12px 24px;
   border: none;
-  border-radius: 10px;
+  border-radius: var(--zen-radius-sm, 6px);
   font-size: 1rem;
   font-weight: 500;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: all 0.15s ease;
   min-width: 100px;
 }
 
 .modal-btn-cancel {
-  background: rgba(255, 255, 255, 0.1);
-  color: currentColor;
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: var(--zen-bg, #080D14);
+  color: var(--zen-text, #C4F0E0);
+  border: 1px solid var(--zen-border, rgba(126, 196, 168, 0.1));
 }
 
 .modal-btn-cancel:hover {
-  background: rgba(255, 255, 255, 0.2);
-  transform: translateY(-1px);
+  background: var(--zen-hover, rgba(4, 164, 105, 0.08));
+  border-color: var(--zen-border-light, rgba(126, 196, 168, 0.2));
 }
 
 .modal-btn-confirm {
-  background: rgba(255, 255, 255, 0.9);
-  color: #1a1a1a;
+  background: var(--zen-accent, #04A469);
+  color: #fff;
 }
 
 .modal-btn-confirm:hover {
-  background: #fff;
-  transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  background: var(--zen-accent-hover, #4de0b2);
+  color: #080D14;
 }
 
 /* Confirm button variants */
 .modal-btn-confirm.danger {
-  background: #ef4444;
+  background: var(--zen-error, #e17055);
   color: white;
 }
 
 .modal-btn-confirm.danger:hover {
-  background: #dc2626;
+  background: #c0392b;
 }
 
 .modal-btn-confirm.success {
-  background: #10b981;
+  background: var(--zen-success, #04A469);
   color: white;
 }
 
 .modal-btn-confirm.success:hover {
-  background: #059669;
+  background: #038a57;
 }
 
 /* Animations */
