@@ -435,18 +435,16 @@ export default {
   display: flex;
   gap: 10px;
   flex-wrap: wrap;
-  backdrop-filter: blur(10px) saturate(180%);
-  -webkit-backdrop-filter: blur(10px) saturate(180%);
-  background: var(--zen-hover);
-  border: 1px solid var(--zen-border-light);
+  background: var(--zen-surface-raised);
+  border: 1px solid var(--zen-border);
   color: var(--zen-text-secondary);
   padding: 0.2rem;
-  border-radius: 0.6rem;
+  border-radius: var(--zen-radius-sm);
   align-self: start;
 }
 
 .tabs.dark {
-  background: var(--zen-bg);
+  background: var(--zen-bg-secondary);
   color: var(--zen-text);
 }
 
@@ -488,7 +486,7 @@ export default {
 }
 
 .add-tab {
-  background: linear-gradient(135deg, #066D5A 0%, #0891b2 100%);
+  background: var(--zen-accent);
   color: white;
   font-size: 1.2rem;
   font-weight: bold;
@@ -511,12 +509,10 @@ export default {
 }
 
 .tab.active {
-  background-color: rgba(6, 109, 90, 0.3);
-  backdrop-filter: blur(10px) saturate(180%);
-  -webkit-backdrop-filter: blur(10px) saturate(180%);
-  border: 1px solid var(--zen-border-light);
+  background-color: var(--zen-hover);
+  border: 1px solid var(--zen-border);
   color: var(--zen-text);
-  border-radius: 0.5rem;
+  border-radius: var(--zen-radius-sm);
 }
 
 .grid {
@@ -541,12 +537,10 @@ export default {
 .card-link {
   height: 115px;
   padding: 16px;
-  border-radius: 1rem;
-  box-shadow: 0 2px 4px var(--zen-shadow);
-  background-color: var(--zen-hover);
-  backdrop-filter: blur(10px) saturate(180%);
-  -webkit-backdrop-filter: blur(10px) saturate(180%);
-  border: 1px solid var(--zen-border-light);
+  border-radius: var(--zen-radius);
+  box-shadow: var(--zen-shadow);
+  background-color: var(--zen-surface-raised);
+  border: 1px solid var(--zen-border);
   text-align: center;
   cursor: pointer;
   text-decoration: none;
@@ -557,24 +551,18 @@ export default {
 }
 
 .card-link:hover {
-  backdrop-filter: blur(10px) saturate(180%);
-  -webkit-backdrop-filter: blur(10px) saturate(180%);
-  background-color: var(--zen-active);
+  background-color: var(--zen-hover);
   border: 1px solid var(--zen-border-light);
 }
 
 .card-link.dark {
-  background-color: var(--zen-bg);
-  backdrop-filter: blur(10px) saturate(180%);
-  -webkit-backdrop-filter: blur(10px) saturate(180%);
-  border: 1px solid var(--zen-border-light);
+  background-color: var(--zen-bg-secondary);
+  border: 1px solid var(--zen-border);
   color: var(--zen-text);
 }
 
 .card-link.dark:hover {
-  backdrop-filter: blur(10px) saturate(180%);
-  -webkit-backdrop-filter: blur(10px) saturate(180%);
-  background-color: var(--zen-bg-secondary);
+  background-color: var(--zen-surface-overlay);
   border: 1px solid var(--zen-border-light);
 }
 

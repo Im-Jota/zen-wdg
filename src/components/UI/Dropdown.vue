@@ -85,7 +85,7 @@ export default {
 }
 
 .select {
-  border-radius: .4rem;
+  border-radius: var(--zen-radius-sm);
   gap: 1rem;
   cursor: pointer;
   display: flex;
@@ -104,33 +104,33 @@ export default {
   top: 110%;
   left: 0;
   padding: .2rem;
-  border-radius: .6rem;
+  border-radius: var(--zen-radius-sm);
   gap: .2rem;
+  display: flex;
+  flex-direction: column;
   
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
-  backdrop-filter: blur(10px) saturate(180%);
-  -webkit-backdrop-filter: blur(10px) saturate(180%);
-  background-color: rgba(20, 20, 20, 0.6);
-  border: 1px solid rgba(255, 255, 255, 0.3);
+  box-shadow: var(--zen-shadow);
+  background-color: var(--zen-surface-overlay);
+  border: 1px solid var(--zen-border-light);
 }
 
 .item {
   gap: 1rem;
   padding: .2rem .4rem;
-  border-radius: .5rem;
+  border-radius: var(--zen-radius-sm);
   cursor: pointer;
   display: flex;
   align-items: center;
-  background-color: rgba(10, 10, 10, .4);
+  background-color: var(--zen-bg-secondary);
   height: 40px;
 }
 
 .item.active {
-  background-color: var(--blue);
+  background-color: var(--zen-accent);
 }
 
 .item:hover {
-  background-color: var(--blue);
+  background-color: var(--zen-accent);
 }
 
 .theme-selector-popup {
@@ -139,7 +139,7 @@ export default {
 
 .logo {
   width: 30px;
-  border-radius: .4rem;
-  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: var(--zen-radius-sm);
+  border: 1px solid var(--zen-border);
 }
 </style>
